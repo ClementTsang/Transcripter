@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Library.fs"/>
+        <Content Include="model\english_huge_1.0.0_model.tflite"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FFMpegCore" Version="4.8.0"/>
+        <PackageReference Include="NAudio" Version="2.1.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\STTClient\STTClient.csproj"/>
+    </ItemGroup>
+
+</Project>
