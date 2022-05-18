@@ -16,16 +16,21 @@ module Transcripter =
         let tempAudioOutputPath = FileSystem.GetTempFileName()
 
         if FFMpeg.ExtractAudio(inputPath, tempAudioOutputPath) then
-            let modelFile = "/model/english_huge_1.0.0_model.tflite"
-            let sttClient = new STT(modelFile)
+            let modelFile = Path.Combine(Environment.CurrentDirectory, @"model\english_huge_1.0.0_model.tflite")
+            
+            if File.Exists(modelFile) then
+                let sttClient = new STT(modelFile)
 
-            let tempAudioFile = File.ReadAllBytes(tempAudioOutputPath)
-            let buffer = WaveBuffer(tempAudioFile)
-            let bufferSize = Convert.ToUInt32(buffer.MaxSize / 2)
+                let tempAudioFile = File.ReadAllBytes(tempAudioOutputPath)
+                let buffer = WaveBuffer(tempAudioFile)
+                let bufferSize = Convert.ToUInt32(buffer.MaxSize / 2)
 
-            let result = sttClient.SpeechToTextWithMetadata(buffer, bufferSize, 1u)
-            deleteIfExists (tempAudioOutputPath)
-            Ok result
+                let result = sttClient.SpeechToTextWithMetadata(buffer, bufferSize, 1u)
+                deleteIfExists tempAudioOutputPath
+                Ok result
+            else
+                deleteIfExists tempAudioOutputPath
+                Error()
         else
-            deleteIfExists (tempAudioOutputPath)
+            deleteIfExists tempAudioOutputPath
             Error()

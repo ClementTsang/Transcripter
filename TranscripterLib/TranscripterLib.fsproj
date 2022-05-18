@@ -6,17 +6,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Library.fs"/>
-        <Content Include="model\english_huge_1.0.0_model.tflite"/>
+        <Compile Include="Library.fs" />
+        <EmbeddedResource Include="model\english_huge_1.0.0_model.tflite">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="FFMpegCore" Version="4.8.0"/>
-        <PackageReference Include="NAudio" Version="2.1.0"/>
+        <PackageReference Include="FFMpegCore" Version="4.8.0" />
+        <PackageReference Include="NAudio" Version="2.1.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\STTClient\STTClient.csproj"/>
+        <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj" />
     </ItemGroup>
 
 </Project>
