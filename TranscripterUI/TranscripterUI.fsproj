@@ -37,4 +37,7 @@
       <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj" />
       <ProjectReference Include="..\TranscripterLib\TranscripterLib.fsproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Content Include="README.md" />
+    </ItemGroup>
 </Project>
