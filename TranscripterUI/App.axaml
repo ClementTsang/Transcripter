@@ -8,5 +8,7 @@
 
     <Application.Styles>
         <FluentTheme Mode="Dark"/>
+        
+        <StyleInclude Source="avares://TranscripterUI/BoxIcons.axaml"/>
     </Application.Styles>
 </Application>

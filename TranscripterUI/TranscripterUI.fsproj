@@ -40,4 +40,10 @@
     <ItemGroup>
       <Content Include="README.md" />
     </ItemGroup>
+    <ItemGroup>
+      <AvaloniaXaml Remove="Icons\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Remove="Icons\**" />
+    </ItemGroup>
 </Project>
