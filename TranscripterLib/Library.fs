@@ -9,8 +9,8 @@ open STTClient
 
 module Transcripter =
     let deleteIfExists filePath =
-        if File.Exists(filePath) then
-            File.Delete(filePath)
+        if File.Exists filePath then
+            File.Delete filePath 
 
     let public transcribe (inputPath: string) =
         let tempAudioOutputPath = FileSystem.GetTempFileName()
@@ -18,11 +18,11 @@ module Transcripter =
         if FFMpeg.ExtractAudio(inputPath, tempAudioOutputPath) then
             let modelFile = Path.Combine(Environment.CurrentDirectory, @"model\english_huge_1.0.0_model.tflite")
             
-            if File.Exists(modelFile) then
+            if File.Exists modelFile then
                 let client = new STT(modelFile)
 
                 let tempAudioFile = File.ReadAllBytes(tempAudioOutputPath)
-                let buffer = WaveBuffer(tempAudioFile)
+                let buffer = WaveBuffer tempAudioFile
                 let bufferSize = Convert.ToUInt32(buffer.MaxSize / 2)
 
                 let result = client.SpeechToTextWithMetadata(buffer, bufferSize, 1u)

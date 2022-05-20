@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:TranscripterUI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="80"
+             x:Class="TranscripterUI.Views.CurrentStepView">
+    
+    <Design.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Design.DataContext>
+
+    <ItemsControl Items="{Binding CurrentSteps.Steps}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Grid IsSharedSizeScope="True"
+                      ColumnDefinitions="Auto,*,Auto,*,Auto"
+                      RowDefinitions="Auto,Auto,Auto" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Grid Width="450">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="ColumnOne" />
+                        <ColumnDefinition SharedSizeGroup="ColumnTwo" />
+                        <ColumnDefinition SharedSizeGroup="ColumnThree" />
+                        <ColumnDefinition SharedSizeGroup="ColumnFour" />
+                        <ColumnDefinition SharedSizeGroup="ColumnFive" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition SharedSizeGroup="RowOne" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition SharedSizeGroup="RowThree" />
+                    </Grid.RowDefinitions>
+                    
+                    <Grid Grid.Row="0" Grid.Column="{Binding Position}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Ellipse Fill="{Binding BorderColour}" Width="36" Height="36" />
+                        <Ellipse Fill="{Binding InnerCircleColour}" Width="32" Height="32" />
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   Foreground="{Binding NumberColour}"
+                                   FontFamily="{StaticResource OpenSans}"
+                                   Text="{Binding Num }"/>
+                    </Grid>
+                
+                    <TextBlock Grid.Row="2" Grid.Column="{Binding Position}" HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="13"
+                               Foreground="{Binding TextColour}"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="{Binding Text }"/>
+
+                    <Border IsVisible="{Binding IsNotLast}" Grid.Column="{Binding SeparatorIndex}" Grid.Row="0" Padding="-10, 0">
+                        <Rectangle Fill="{Binding LineColour}" Height="2" />
+                    </Border>
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    
+</UserControl>

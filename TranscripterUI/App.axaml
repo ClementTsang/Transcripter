@@ -5,10 +5,14 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
+    
+    <Application.Resources>
+        <FontFamily x:Key="OpenSans">avares://TranscripterUI/Assets/Fonts/OpenSans/OpenSans-Regular.ttf</FontFamily>
+    </Application.Resources>
 
     <Application.Styles>
         <FluentTheme Mode="Dark"/>
-        
         <StyleInclude Source="avares://TranscripterUI/BoxIcons.axaml"/>
+        <StyleInclude Source="avares://TranscripterUI/ButtonStyles.axaml"/>
     </Application.Styles>
 </Application>

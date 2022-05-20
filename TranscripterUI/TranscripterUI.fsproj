@@ -13,8 +13,10 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ViewModels\ViewModelBase.fs" />
+        <Compile Include="ViewModels\CurrentStepViewModel.fs" />
         <Compile Include="ViewModels\MainWindowViewModel.fs" />
         <Compile Include="Views\MainWindow.axaml.fs" />
+        <Compile Include="Views\CurrentStepView.axaml.fs" />
         <Compile Include="ViewLocator.fs" />
         <Compile Include="App.axaml.fs" />
         <Compile Include="Program.fs" />
@@ -38,6 +40,9 @@
       <ProjectReference Include="..\TranscripterLib\TranscripterLib.fsproj" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="..\..\ramblings\transcripter.md">
+        <Link>transcripter.md</Link>
+      </Content>
       <Content Include="README.md" />
     </ItemGroup>
     <ItemGroup>
