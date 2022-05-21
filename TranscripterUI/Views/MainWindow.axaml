@@ -36,7 +36,7 @@
                 <views:CurrentStepView />
             
                 <Panel VerticalAlignment="Center">
-                    <views:SelectFilesView />
+                    <ContentControl Content="{Binding CurrentStepTracking.GetCurrentStep.StepViewModel}"/>
                 </Panel>
             </Panel>
         </Border>

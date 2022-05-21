@@ -1,8 +1,6 @@
 namespace TranscripterUI.Views
 
-open Avalonia
 open Avalonia.Controls
-open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Markup.Xaml
 
 type SelectFilesView () as this = 

@@ -11,8 +11,9 @@ type SelectFilesViewModel() =
     member private this.SelectFilesAsync =
         fun () ->
             Task.Factory.StartNew(fun () ->
-                this.ShowOpenFileDialog.Handle(()).Subscribe(fun files ->
-                    () 
+                this.ShowOpenFileDialog.Handle(()).Subscribe(
+                    fun files ->
+                        printfn($"files: {files}")
                 ) |> ignore
             )
         

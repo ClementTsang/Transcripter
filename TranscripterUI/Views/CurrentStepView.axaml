@@ -10,7 +10,7 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <ItemsControl Items="{Binding CurrentSteps.Steps}">
+    <ItemsControl Items="{Binding CurrentStepTracking.Steps}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <Grid IsSharedSizeScope="True"

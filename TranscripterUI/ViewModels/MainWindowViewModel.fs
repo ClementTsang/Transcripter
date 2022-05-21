@@ -6,10 +6,9 @@ open System.Runtime.Serialization
 type MainWindowViewModel() =
     inherit ViewModelBase()
  
-    member val CurrentSteps = CurrentStepViewModel([
-        "Select Files";
-        "Configuration"
-        "Go!"
+    member val CurrentStepTracking = CurrentStepViewModel([
+        ("Select Files", SelectFilesViewModel());
+        ("Configuration", ViewModelBase());
+        ("Go!", ViewModelBase())
     ]) with get
     
-    member val SelectFilesVM = SelectFilesViewModel()

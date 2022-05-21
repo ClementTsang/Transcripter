@@ -7,7 +7,7 @@
              x:Class="TranscripterUI.Views.SelectFilesView">
     
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:SelectFilesViewModel/>
     </Design.DataContext>
   
     <StackPanel Spacing="18" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -22,7 +22,7 @@
                        FontSize="16"
                        Foreground="#fff"
                        FontFamily="{StaticResource OpenSans}"
-                       Text="Drag and drop files to transcribe"/>
+                       Text="Select files to transcribe"/>
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="13"
@@ -38,7 +38,7 @@
                 HorizontalAlignment="Center"
                 FontSize="14"
                 FontFamily="{StaticResource OpenSans}"
-                Command="{Binding SelectFilesVM.SelectFiles}"/>
+                Command="{Binding SelectFiles}"/>
     </StackPanel>
     
 </UserControl>

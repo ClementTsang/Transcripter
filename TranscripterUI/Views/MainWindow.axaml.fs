@@ -18,11 +18,22 @@ type MainWindow () as this =
         this.AttachDevTools()
 #endif
         AvaloniaXamlLoader.Load(this)
-        this.WhenActivated(fun (disposable: CompositeDisposable) ->
-            let handler = this.ViewModel.SelectFilesVM.ShowOpenFileDialog.RegisterHandler(this.ShowOpenFileDialog)
-            disposable.Add(handler)
-        ) |> ignore
+        this.BindSelectFileDialog()
         
+    member private this.BindSelectFileDialog () =
+        this.WhenActivated(fun (disposable: CompositeDisposable) ->
+            match this.ViewModel.CurrentStepTracking.Steps[0].StepViewModel with
+            | :? SelectFilesViewModel as selectFilesVM ->
+                let handler = selectFilesVM.ShowOpenFileDialog.RegisterHandler(this.ShowOpenFileDialog)
+                disposable.Add(handler)
+            | _ -> ()
+        ) |> ignore
+    
+    /// <summary>
+    ///     Opens the file dialog and sends the selected files through the given InteractionContext.
+    ///     
+    ///     Approach based on the <a href="https://github.com/grokys/FileDialogMvvm">following example</a>.
+    /// </summary>
     member private this.ShowOpenFileDialog (interaction: InteractionContext<Unit, List<string>>) =
         let dialog = OpenFileDialog()
         
@@ -43,5 +54,5 @@ type MainWindow () as this =
                     |> Async.RunSynchronously
                     |> fun arr -> if isNull(arr) then List.Empty else Array.toList arr
                 )
-            } |> Async.Start
+            } |> Async.RunSynchronously 
         }
