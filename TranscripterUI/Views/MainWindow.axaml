@@ -33,10 +33,10 @@
         
         <Border HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="0, 20">
             <Panel>
-                <views:CurrentStepView />
+                <ContentControl Content="{Binding CurrentStepTracking}"/>
             
                 <Panel VerticalAlignment="Center">
-                    <ContentControl Content="{Binding CurrentStepTracking.GetCurrentStep.StepViewModel}"/>
+                    <ContentControl Content="{Binding CurrentVM}"/>
                 </Panel>
             </Panel>
         </Border>

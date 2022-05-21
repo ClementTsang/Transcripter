@@ -38,7 +38,7 @@
                 HorizontalAlignment="Center"
                 FontSize="14"
                 FontFamily="{StaticResource OpenSans}"
-                Command="{Binding SelectFiles}"/>
+                Command="{Binding $parent[Window].DataContext.SelectFiles}"/>
     </StackPanel>
     
 </UserControl>

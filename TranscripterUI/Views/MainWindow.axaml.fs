@@ -22,11 +22,8 @@ type MainWindow () as this =
         
     member private this.BindSelectFileDialog () =
         this.WhenActivated(fun (disposable: CompositeDisposable) ->
-            match this.ViewModel.CurrentStepTracking.Steps[0].StepViewModel with
-            | :? SelectFilesViewModel as selectFilesVM ->
-                let handler = selectFilesVM.ShowOpenFileDialog.RegisterHandler(this.ShowOpenFileDialog)
-                disposable.Add(handler)
-            | _ -> ()
+            let handler = this.ViewModel.ShowOpenFileDialog.RegisterHandler(this.ShowOpenFileDialog)
+            disposable.Add(handler)
         ) |> ignore
     
     /// <summary>

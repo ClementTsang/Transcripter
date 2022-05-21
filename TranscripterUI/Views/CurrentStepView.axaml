@@ -7,10 +7,10 @@
              x:Class="TranscripterUI.Views.CurrentStepView">
     
     <Design.DataContext>
-        <viewModels:MainWindowViewModel />
+        <viewModels:CurrentStepViewModel />
     </Design.DataContext>
 
-    <ItemsControl Items="{Binding CurrentStepTracking.Steps}">
+    <ItemsControl Items="{Binding Steps}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <Grid IsSharedSizeScope="True"
