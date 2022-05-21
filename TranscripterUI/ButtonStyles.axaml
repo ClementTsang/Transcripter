@@ -11,7 +11,7 @@
         <Setter Property="Background" Value="transparent"/>
         <Setter Property="Opacity" Value="0.5"/>
     </Style>
-        
+    
     <Style Selector="Button:pointerover.Icon /template/ ContentPresenter">
         <Setter Property="Background" Value="transparent"/>
         <Setter Property="Opacity" Value="1"/>
@@ -29,5 +29,11 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="#1e6fa8"/>
+    </Style>
+    
+    <Style Selector="Button.LinkButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
     </Style>
 </Styles>

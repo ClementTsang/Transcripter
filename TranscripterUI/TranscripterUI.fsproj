@@ -14,11 +14,9 @@
     <ItemGroup>
         <Compile Include="ViewModels\ViewModelBase.fs" />
         <Compile Include="ViewModels\CurrentStepViewModel.fs" />
-        <Compile Include="ViewModels\HelpWindowViewModel.fs" />
         <Compile Include="ViewModels\SelectFilesViewModel.fs" />
         <Compile Include="ViewModels\MainWindowViewModel.fs" />
         <Compile Include="Views\CurrentStepView.axaml.fs" />
-        <Compile Include="Views\HelpWindow.axaml.fs" />
         <Compile Include="Views\SelectFilesView.axaml.fs" />
         <Compile Include="Views\MainWindow.axaml.fs" />
         <Compile Include="ViewLocator.fs" />

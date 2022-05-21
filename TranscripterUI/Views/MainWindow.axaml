@@ -18,18 +18,18 @@
     </Design.DataContext>
 
     <Panel Background="#2c2f33">
-        <Button Name="HelpButton"
-                Classes="Icon"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Width="24"
-                Height="24"
-                Margin="12,12"
-                >
-            <DrawingPresenter Width="24" Height="24" Drawing="{DynamicResource BoxIcons.SolidHelpCircle}" />
-        </Button>
+        <!-- <Button Name="HelpButton" -->
+        <!--         Classes="Icon" -->
+        <!--         HorizontalAlignment="Right" -->
+        <!--         VerticalAlignment="Top" -->
+        <!--         HorizontalContentAlignment="Center" -->
+        <!--         VerticalContentAlignment="Center" -->
+        <!--         Width="24" -->
+        <!--         Height="24" -->
+        <!--         Margin="12,12" -->
+        <!--         > -->
+        <!--     <DrawingPresenter Width="24" Height="24" Drawing="{DynamicResource BoxIcons.SolidInfoCircle}" /> -->
+        <!-- </Button> -->
         
         <Border HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="0, 20">
             <Panel>
