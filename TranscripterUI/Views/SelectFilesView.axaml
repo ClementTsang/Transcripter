@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:TranscripterUI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TranscripterUI.Views.SelectFilesView">
+    
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+  
+    <StackPanel Spacing="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid>
+            <Ellipse Fill="#23272A" Width="100" Height="100"/>
+            <DrawingPresenter Width="25" Height="25" Drawing="{DynamicResource BoxIcons.RegularPlus}" />
+        </Grid>
+                
+        <StackPanel Spacing="2">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="16"
+                       Foreground="#fff"
+                       FontFamily="{StaticResource OpenSans}"
+                       Text="Drag and drop files to transcribe"/>
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="13"
+                       Foreground="#99AAB5"
+                       FontFamily="{StaticResource OpenSans}"
+                       Text="Note that you can select multiple files at once."/>
+        </StackPanel>
+                        
+        <Button Name="SelectFiles"
+                Classes="Standard"
+                Content="Select Files"
+                Width="120"
+                HorizontalAlignment="Center"
+                FontSize="14"
+                FontFamily="{StaticResource OpenSans}"
+                Command="{Binding SelectFilesVM.SelectFiles}"/>
+    </StackPanel>
+    
+</UserControl>

@@ -1,15 +1,15 @@
 namespace TranscripterUI.Views
 
-open System
+open System.Reactive.Disposables
+open ReactiveUI
 open Avalonia
 open Avalonia.Controls
 open Avalonia.Markup.Xaml
+open Avalonia.ReactiveUI
+open TranscripterUI.ViewModels
 
 type MainWindow () as this = 
-    inherit Window ()
-    
-    [<NonSerialized>]
-    let ofd = OpenFileDialog()
+    inherit ReactiveWindow<MainWindowViewModel>()
     
     do this.InitializeComponent()
     
@@ -18,22 +18,30 @@ type MainWindow () as this =
         this.AttachDevTools()
 #endif
         AvaloniaXamlLoader.Load(this)
+        this.WhenActivated(fun (disposable: CompositeDisposable) ->
+            let handler = this.ViewModel.SelectFilesVM.ShowOpenFileDialog.RegisterHandler(this.ShowOpenFileDialog)
+            disposable.Add(handler)
+        ) |> ignore
+        
+    member private this.ShowOpenFileDialog (interaction: InteractionContext<Unit, List<string>>) =
+        let dialog = OpenFileDialog()
         
         let allFilter = FileDialogFilter()
         allFilter.Name <- "All Files"
         allFilter.Extensions.Add("*")
         
-        ofd.AllowMultiple <- true
-        ofd.Filters.Add(allFilter)
-        ofd.Title <- "Select files to transcribe"
+        dialog.AllowMultiple <- true
+        dialog.Filters.Add(allFilter)
+        dialog.Title <- "Select files to transcribe"
         
-        this.FindControl<Button>("SelectFiles").Click
-        |> Event.add(fun _ ->
+        printfn("Opening file dialog.")
+        task {
             async {
-                ofd.ShowAsync(this)
-                |> Async.AwaitTask
-                |> Async.Ignore // TODO: Remove this later
-                |> Async.RunSynchronously
+                interaction.SetOutput(
+                    dialog.ShowAsync(this)
+                    |> Async.AwaitTask
+                    |> Async.RunSynchronously
+                    |> fun arr -> if isNull(arr) then List.Empty else Array.toList arr
+                )
             } |> Async.Start
-        )
-            
+        }

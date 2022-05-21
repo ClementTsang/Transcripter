@@ -18,15 +18,16 @@
     </Design.DataContext>
 
     <Panel Background="#2c2f33">
-        <Button
-            Classes="Icon"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            Width="24"
-            Height="24"
-            Margin="12,12">
+        <Button Name="HelpButton"
+                Classes="Icon"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Width="24"
+                Height="24"
+                Margin="12,12"
+                >
             <DrawingPresenter Width="24" Height="24" Drawing="{DynamicResource BoxIcons.SolidHelpCircle}" />
         </Button>
         
@@ -35,35 +36,7 @@
                 <views:CurrentStepView />
             
                 <Panel VerticalAlignment="Center">
-                    <StackPanel Spacing="15" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Grid>
-                            <Ellipse Fill="#23272A" Width="70" Height="70"/>
-                            <DrawingPresenter Width="20" Height="20" Drawing="{DynamicResource BoxIcons.RegularPlus}" />
-                        </Grid>
-                
-                        <StackPanel Spacing="2">
-                            <TextBlock HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="13"
-                                       Foreground="#fff"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       Text="Select files to transcribe"/>
-                            <TextBlock HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="11"
-                                       Foreground="#99AAB5"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       Text="Note that you can select multiple files."/>
-                        </StackPanel>
-                        
-                        <Button Name="SelectFiles"
-                                Classes="Standard"
-                                Content="Select Files"
-                                Width="100"
-                                HorizontalAlignment="Center"
-                                FontSize="14"
-                                FontFamily="{StaticResource OpenSans}"/>
-                    </StackPanel>
+                    <views:SelectFilesView />
                 </Panel>
             </Panel>
         </Border>
