@@ -10,28 +10,36 @@
 
 ### Install FFMpeg
 
-This program relies on FFMPeg to convert video and audio files into an appropriate format for speech-to-text. As such, one must have
-FFMpeg installed on their computer and accessible on PATH.
+This program relies on FFMPeg to convert video and audio files into an appropriate format for speech-to-text. As such,
+one must have FFMpeg installed on their computer and accessible on PATH.
 
 --- TODO: In progress ---
 
 ## Development
 
-If you want to mess around with the repo, feel free to clone it. This project is written in F#, and as of writing, built on .NET Core 6.0.102.
+If you want to mess around with the repo, feel free to clone it. This project is written in F#, and as of writing, built
+on .NET Core 6.0.102.
 
 ### Project Structure
 
 This repo is split into two main parts:
 
-- [`TranscripterLib`](./TranscripterLib): The "core" library for transcription logic. This isn't really much more than a simple wrapper on top of 
-  Coqui's [STT](https://github.com/coqui-ai/STT) for speech-to-text and FFMpeg via FFMpegCore to convert video files into the appropriate audio files for STT.
-- [`TranscripterUI`](./TranscripterUI): Handles the UI and application logic to transcribe files, built on [Avalonia](https://avaloniaui.net/).
+- [`TranscripterLib`](./TranscripterLib): The "core" library for transcription logic. This isn't really much more than a
+  simple wrapper on top of
+  Coqui's [STT](https://github.com/coqui-ai/STT) for speech-to-text and FFMpeg via FFMpegCore to convert video files
+  into the appropriate audio files for STT.
+- [`TranscripterUI`](./TranscripterUI): Handles the UI and application logic to transcribe files, built
+  on [Avalonia](https://avaloniaui.net/).
 
-A submodule from v1.3.0 of [the STT repo](https://github.com/coqui-ai/STT) is also included in the repo - the main important part is the [.NET library](https://github.com/coqui-ai/STT/tree/main/native_client/dotnet) portion of the repo.
+A submodule from v1.3.0 of [the STT repo](https://github.com/coqui-ai/STT) is also included in the repo - the main
+important part is the [.NET library](https://github.com/coqui-ai/STT/tree/main/native_client/dotnet) portion of the
+repo.
 
-The English language model and scorer used for speech-to-text is also from STT (English, 1.0.0). This can be found inside the `TranscripterLib` portion of the repo [here](./TranscripterLib/model), and
+The English language model and scorer used for speech-to-text is also from STT (English, 1.0.0). This can be found
+inside the `TranscripterLib` portion of the repo [here](./TranscripterLib/model), and
 the model/scorer itself can be found from Coqui's website [here](https://coqui.ai/english/coqui/v1.0.0-huge-vocab).
 
 ## Motivation
 
-I was looking for a simple offline program to get transcripts from a bunch of lecture recordings I had, and also wanted a bit of an excuse to get my feet wet with F#, Avalonia, and STT.
+I was looking for a simple offline program to get transcripts from a bunch of lecture recordings I had, and also wanted
+a bit of an excuse to get my feet wet with F#, Avalonia, and STT.

@@ -11,9 +11,9 @@
         Icon="/Assets/Icons/icon.ico"
         Title="Transcripter"
         ExtendClientAreaToDecorationsHint="True">
-    
+
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
     <Panel Background="#2c2f33">
@@ -29,13 +29,13 @@
         <!--         > -->
         <!--     <DrawingPresenter Width="24" Height="24" Drawing="{DynamicResource BoxIcons.SolidInfoCircle}" /> -->
         <!-- </Button> -->
-        
+
         <Border HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="0, 20">
             <Panel>
-                <ContentControl Content="{Binding CurrentStepTracking}"/>
-            
+                <ContentControl Content="{Binding CurrentStepTracking}" />
+
                 <Panel VerticalAlignment="Center">
-                    <ContentControl Content="{Binding CurrentVM}"/>
+                    <ContentControl Content="{Binding CurrentVM}" />
                 </Panel>
             </Panel>
         </Border>

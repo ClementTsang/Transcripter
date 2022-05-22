@@ -31,11 +31,14 @@ type CurrentStepViewModel() =
 
     member val NumberSteps = steps.Length with get, set
 
-    member this.GetCurrentStep = this.Steps[this.CurrentStepIndex]
+    member this.GetCurrentStep =
+        this.Steps[this.CurrentStepIndex]
 
-    member this.NextStep = this.SetStep(this.CurrentStepIndex + 1)
+    member this.NextStep =
+        this.SetStep(this.CurrentStepIndex + 1)
 
-    member this.PrevStep = this.SetStep(this.CurrentStepIndex - 1)
+    member this.PrevStep =
+        this.SetStep(this.CurrentStepIndex - 1)
 
     member this.EnableAllSteps =
         this.SetStep(this.CurrentStepIndex, true)
@@ -43,21 +46,23 @@ type CurrentStepViewModel() =
     member this.DisableAllSteps =
         this.SetStep(this.CurrentStepIndex, false)
 
-    member this.SetStep(newStepIndex: int) =
-        this.SetStep(newStepIndex, true)
+    member this.SetStep(newStepIndex: int) = this.SetStep(newStepIndex, true)
 
     member this.SetStep(newStepIndex: int, enabled: bool) =
         if newStepIndex >= 0
            && newStepIndex < this.NumberSteps then
             // This is *really* inefficient but I'm kinda ??? on how to do this properly...
 
-            let oldSteps: Step [] = Array.zeroCreate this.Steps.Count
+            let oldSteps: Step [] =
+                Array.zeroCreate this.Steps.Count
+
             this.Steps.CopyTo(oldSteps, 0)
 
             oldSteps
             |> Seq.indexed
             |> Seq.iter (fun (index, step) ->
                 step.Enabled <- enabled
+
                 if index < newStepIndex then
                     step.ProgressState <- StepProgress.Completed
                 else if index = newStepIndex then

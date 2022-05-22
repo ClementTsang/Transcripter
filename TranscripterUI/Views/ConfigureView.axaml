@@ -5,11 +5,11 @@
              xmlns:vm="clr-namespace:TranscripterUI.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="TranscripterUI.Views.ConfigureView">
-    
+
     <Design.DataContext>
-        <vm:ConfigureViewModel/>
+        <vm:ConfigureViewModel />
     </Design.DataContext>
-  
+
     <StackPanel Spacing="18" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Button Name="Start"
                 Classes="Standard"
@@ -18,7 +18,7 @@
                 HorizontalAlignment="Center"
                 FontSize="14"
                 FontFamily="{StaticResource OpenSans}"
-                Command="{Binding $parent[Window].DataContext.Transcribe}"/>
+                Command="{Binding $parent[Window].DataContext.Transcribe}" />
     </StackPanel>
-    
+
 </UserControl>

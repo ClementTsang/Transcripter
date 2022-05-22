@@ -7,8 +7,8 @@ open TranscripterUI
 
 module Program =
 
-    [<CompiledName "BuildAvaloniaApp">] 
-    let buildAvaloniaApp () = 
+    [<CompiledName "BuildAvaloniaApp">]
+    let buildAvaloniaApp () =
         AppBuilder
             .Configure<App>()
             .UsePlatformDetect()
@@ -17,4 +17,5 @@ module Program =
 
     [<EntryPoint; STAThread>]
     let main argv =
-        buildAvaloniaApp().StartWithClassicDesktopLifetime(argv)
+        buildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(argv)

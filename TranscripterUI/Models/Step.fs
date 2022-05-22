@@ -24,21 +24,21 @@ type Step(num: int, text: string, vm: ViewModelBase, isLast: bool, progress: Ste
     [<Literal>]
     let lighterGrey = "#3f4449"
 
-//    let event = Event<_, _>()
-//    
+    //    let event = Event<_, _>()
+//
 //    let mutable progressState = progress
 //    member this.ProgressState
 //        with get(): StepProgress = progressState
 //        and set value =
 //            progressState <- value
 //            event.Trigger(this, PropertyChangedEventArgs("ProgressState"))
-//            
+//
 //    interface INotifyPropertyChanged with
 //        [<CLIEvent>]
 //        member this.PropertyChanged = event.Publish
-    
+
     member val ProgressState = progress with get, set
-    
+
     member val IsNotLast = if isLast then "False" else "True"
     member val Position = num * 2
     member val SeparatorIndex = if isLast then 0 else (num * 2) + 1
@@ -47,15 +47,18 @@ type Step(num: int, text: string, vm: ViewModelBase, isLast: bool, progress: Ste
     member val Text = text
     member val StepViewModel = vm
     member val Enabled = true with get, set
-    
+
     member this.IsCompleted =
         match this.ProgressState with
         | StepProgress.Completed -> "True"
         | StepProgress.InProgress -> "False"
         | StepProgress.Upcoming -> "False"
-        
+
     member this.IsEnabled =
-        this.Enabled && (match this.ProgressState with StepProgress.Completed -> true | _ -> false)
+        this.Enabled
+        && (match this.ProgressState with
+            | StepProgress.Completed -> true
+            | _ -> false)
 
     member this.NumberColour =
         match this.ProgressState with

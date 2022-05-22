@@ -3,16 +3,16 @@
              xmlns:local="using:TranscripterUI"
              x:Class="TranscripterUI.App">
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
-    
+
     <Application.Resources>
         <FontFamily x:Key="OpenSans">avares://TranscripterUI/Assets/Fonts/OpenSans/OpenSans-Regular.ttf</FontFamily>
     </Application.Resources>
 
     <Application.Styles>
-        <FluentTheme Mode="Dark"/>
-        <StyleInclude Source="avares://TranscripterUI/BoxIcons.axaml"/>
-        <StyleInclude Source="avares://TranscripterUI/ButtonStyles.axaml"/>
+        <FluentTheme Mode="Dark" />
+        <StyleInclude Source="avares://TranscripterUI/BoxIcons.axaml" />
+        <StyleInclude Source="avares://TranscripterUI/ButtonStyles.axaml" />
     </Application.Styles>
 </Application>
