@@ -3,6 +3,7 @@
 open System.Runtime.Serialization
 open System.Threading.Tasks
 open ReactiveUI
+open TranscripterLib
 open TranscripterUI.ViewModels
 
 [<DataContract>]
@@ -36,3 +37,26 @@ type MainWindowViewModel() =
             )
         
     member this.SelectFiles = ReactiveCommand.CreateFromTask(this.SelectFilesAsync)
+    
+    member private this.TranscribeTask =
+        fun() ->
+            Task.Factory.StartNew(fun () ->
+                match Transcripter.NewClient with
+                | Ok(client) -> 
+                    printfn($"Files: {this.CurrentlySelectedFiles}")
+                    this.CurrentlySelectedFiles
+                    |> Seq.map (fun file ->
+                            let stopWatch = System.Diagnostics.Stopwatch.StartNew()
+                            printfn($"transcribing {file}")
+                            match Transcripter.Transcribe(client, file) with
+                            | Ok(result) -> printfn($"ok: {result}")
+                            | Error(err) -> printfn($"err: {err}")
+                            stopWatch.Stop()
+                            printfn($"time elapsed: {stopWatch.ElapsedMilliseconds / 1000L}")
+                        )
+                    |> Seq.toArray
+                    |> ignore
+                | Error(err) -> printfn($"err creating client: {err}")
+            )
+        
+    member this.Transcribe = ReactiveCommand.CreateFromTask(this.TranscribeTask)

@@ -9,7 +9,7 @@ type CurrentStepViewModel() =
     
     let steps: List<string * ViewModelBase> = [
         ("Select Files", SelectFilesViewModel());
-        ("Configuration", ViewModelBase());
+        ("Configuration", ConfigureViewModel());
         ("Go!", ViewModelBase())
     ]
 

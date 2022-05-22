@@ -15,8 +15,10 @@
         <Compile Include="ViewModels\ViewModelBase.fs" />
         <Compile Include="Models\Step.fs" />
         <Compile Include="ViewModels\SelectFilesViewModel.fs" />
+        <Compile Include="ViewModels\ConfigureViewModel.fs" />
         <Compile Include="ViewModels\CurrentStepViewModel.fs" />
         <Compile Include="ViewModels\MainWindowViewModel.fs" />
+        <Compile Include="Views\ConfigureView.fs" />
         <Compile Include="Views\CurrentStepView.axaml.fs" />
         <Compile Include="Views\SelectFilesView.axaml.fs" />
         <Compile Include="Views\MainWindow.axaml.fs" />
@@ -37,6 +39,7 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.13" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.13" />
+        <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj" />

@@ -10,9 +10,25 @@
         <EmbeddedResource Include="model\english_huge_1.0.0_model.tflite">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </EmbeddedResource>
+        <Content Include="model\huge-vocabulary.scorer">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <ContentWithTargetPath Include="shared_libs\libstt.tflite.Linux\libkenlm.so">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libkenlm.so</TargetPath>
+        </ContentWithTargetPath>
+        <ContentWithTargetPath Include="shared_libs\libstt.tflite.Linux\libsox.so.3">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libsox.so.3</TargetPath>
+        </ContentWithTargetPath>
+        <ContentWithTargetPath Include="shared_libs\libstt.tflite.Linux\libstt.so">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libstt.so</TargetPath>
+        </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="FFMpegCore" Version="4.8.0" />
         <PackageReference Include="NAudio" Version="2.1.0" />
     </ItemGroup>
 

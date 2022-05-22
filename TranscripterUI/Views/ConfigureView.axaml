@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:TranscripterUI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TranscripterUI.Views.ConfigureView">
+    
+    <Design.DataContext>
+        <vm:ConfigureViewModel/>
+    </Design.DataContext>
+  
+    <StackPanel Spacing="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Button Name="Start"
+                Classes="Standard"
+                Content="Start"
+                Width="120"
+                HorizontalAlignment="Center"
+                FontSize="14"
+                FontFamily="{StaticResource OpenSans}"
+                Command="{Binding $parent[Window].DataContext.Transcribe}"/>
+    </StackPanel>
+    
+</UserControl>

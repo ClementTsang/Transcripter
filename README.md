@@ -2,7 +2,7 @@
   <h1>Transcripter</h1>
 
   <p>
-  A simple, offline program to automatically get transcriptions from files with audio.
+  A simple, offline program to automatically get transcriptions from files with English audio.
   </p>
 </div>
 
@@ -24,7 +24,8 @@ This repo is split into two main parts:
 
 A submodule from v1.3.0 of [the STT repo](https://github.com/coqui-ai/STT) is also included in the repo - the main important part is the [.NET library](https://github.com/coqui-ai/STT/tree/main/native_client/dotnet) portion of the repo.
 
-The English language model used for speech-to-text is also from STT (English, 1.0.0). This can be found inside the `TranscripterLib` portion of the repo [here](./TranscripterLib/model/).
+The English language model and scorer used for speech-to-text is also from STT (English, 1.0.0). This can be found inside the `TranscripterLib` portion of the repo [here](./TranscripterLib/model), and
+the model/scorer itself can be found from Coqui's website [here](https://coqui.ai/english/coqui/v1.0.0-huge-vocab).
 
 ## Motivation
 
