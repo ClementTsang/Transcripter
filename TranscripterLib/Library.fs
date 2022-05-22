@@ -12,7 +12,7 @@ module Transcripter =
         if File.Exists filePath then
             File.Delete filePath
 
-    let public NewClient =
+    let public NewClient(useScorer: bool) =
         let modelFile =
             Path.Combine(Environment.CurrentDirectory, @"model/english_huge_1.0.0_model.tflite")
 
@@ -21,11 +21,12 @@ module Transcripter =
 
         if not (File.Exists modelFile) then
             Error("Failed to load model file.")
-        else if not (File.Exists scorerFile) then
+        else if useScorer && not (File.Exists scorerFile) then
             Error("Failed to load scorer file.")
         else
             let client = new STT(modelFile)
-            client.EnableExternalScorer(scorerFile)
+            if useScorer then
+                client.EnableExternalScorer(scorerFile)
             Ok(client)
 
     let public Transcribe (client: STT, inputPath: string) =

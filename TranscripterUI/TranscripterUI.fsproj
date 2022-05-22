@@ -49,6 +49,9 @@
       <Content Include="..\..\ramblings\transcripter.md">
         <Link>transcripter.md</Link>
       </Content>
+      <Content Include="..\README.md">
+        <Link>README.md</Link>
+      </Content>
       <Content Include="README.md" />
     </ItemGroup>
     <ItemGroup>

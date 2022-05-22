@@ -41,7 +41,7 @@ type MainWindowViewModel() =
     member private this.TranscribeTask =
         fun() ->
             Task.Factory.StartNew(fun () ->
-                match Transcripter.NewClient with
+                match Transcripter.NewClient(true) with
                 | Ok(client) -> 
                     printfn($"Files: {this.CurrentlySelectedFiles}")
                     this.CurrentlySelectedFiles
@@ -60,3 +60,4 @@ type MainWindowViewModel() =
             )
         
     member this.Transcribe = ReactiveCommand.CreateFromTask(this.TranscribeTask)
+    
