@@ -38,9 +38,14 @@ type MainWindowViewModel() =
         
     member this.SelectFiles = ReactiveCommand.CreateFromTask(this.SelectFilesAsync)
     
+    member this.SetStepCommand(stepIndex: string) =
+        this.CurrentStepTracking.SetStepCommand(stepIndex)
+        this.CurrentVM <- this.CurrentStepTracking.GetCurrentStep.StepViewModel
+    
     member private this.TranscribeTask =
         fun() ->
             Task.Factory.StartNew(fun () ->
+                this.CurrentStepTracking.DisableAllSteps
                 match Transcripter.NewClient(true) with
                 | Ok(client) -> 
                     printfn($"Files: {this.CurrentlySelectedFiles}")
@@ -57,6 +62,7 @@ type MainWindowViewModel() =
                     |> Seq.toArray
                     |> ignore
                 | Error(err) -> printfn($"err creating client: {err}")
+                this.CurrentStepTracking.EnableAllSteps
             )
         
     member this.Transcribe = ReactiveCommand.CreateFromTask(this.TranscribeTask)

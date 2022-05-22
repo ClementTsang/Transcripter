@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:TranscripterUI.ViewModels"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="80"
              x:Class="TranscripterUI.Views.CurrentStepView">
     
@@ -35,16 +36,27 @@
                         <RowDefinition SharedSizeGroup="RowThree" />
                     </Grid.RowDefinitions>
                     
-                    <Grid Grid.Row="0" Grid.Column="{Binding Position}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Ellipse Fill="{Binding BorderColour}" Width="38" Height="38" />
-                        <Ellipse Fill="{Binding InnerCircleColour}" Width="34" Height="34" />
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   FontSize="16"
-                                   Foreground="{Binding NumberColour}"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   Text="{Binding Num }"/>
-                    </Grid>
+                        <Button Classes="NoBackground"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="38"
+                                Height="38"
+                                Grid.Row="0"
+                                Grid.Column="{Binding Position}"
+                                IsEnabled="{Binding IsEnabled}"
+                                Command="{Binding $parent[Window].DataContext.SetStepCommand}"
+                                CommandParameter="{Binding Index}">
+                            <Grid>
+                                <Ellipse Fill="{Binding BorderColour}" Width="38" Height="38" />
+                                <Ellipse Fill="{Binding InnerCircleColour}" Width="34" Height="34" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="16"
+                                           Foreground="{Binding NumberColour}"
+                                           FontFamily="{StaticResource OpenSans}"
+                                           Text="{Binding Num }"/>
+                            </Grid>
+                        </Button>
                 
                     <TextBlock Grid.Row="2" Grid.Column="{Binding Position}" HorizontalAlignment="Center"
                                VerticalAlignment="Center"
@@ -53,7 +65,7 @@
                                FontFamily="{StaticResource OpenSans}"
                                Text="{Binding Text }"/>
 
-                    <Border IsVisible="{Binding IsNotLast}" Grid.Column="{Binding SeparatorIndex}" Grid.Row="0" Padding="-10, 0">
+                    <Border IsVisible="{Binding IsNotLast}" Grid.Column="{Binding SeparatorIndex}" Grid.Row="0" Padding="-15, 0">
                         <Rectangle Fill="{Binding LineColour}" Height="2" />
                     </Border>
                 </Grid>

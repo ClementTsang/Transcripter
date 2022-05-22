@@ -43,8 +43,19 @@ type Step(num: int, text: string, vm: ViewModelBase, isLast: bool, progress: Ste
     member val Position = num * 2
     member val SeparatorIndex = if isLast then 0 else (num * 2) + 1
     member val Num = num + 1
+    member val Index = num
     member val Text = text
     member val StepViewModel = vm
+    member val Enabled = true with get, set
+    
+    member this.IsCompleted =
+        match this.ProgressState with
+        | StepProgress.Completed -> "True"
+        | StepProgress.InProgress -> "False"
+        | StepProgress.Upcoming -> "False"
+        
+    member this.IsEnabled =
+        this.Enabled && (match this.ProgressState with StepProgress.Completed -> true | _ -> false)
 
     member this.NumberColour =
         match this.ProgressState with

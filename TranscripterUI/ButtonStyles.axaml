@@ -7,14 +7,18 @@
     </Design.PreviewWith>
 
     <!-- Add Styles Here -->
-    <Style Selector="Button.Icon /template/ ContentPresenter">
+    <Style Selector="Button.NoBackground /template/ ContentPresenter">
         <Setter Property="Background" Value="transparent"/>
-        <Setter Property="Opacity" Value="0.5"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
     </Style>
     
-    <Style Selector="Button:pointerover.Icon /template/ ContentPresenter">
+    <Style Selector="Button:pointerover.NoBackground /template/ ContentPresenter">
         <Setter Property="Background" Value="transparent"/>
-        <Setter Property="Opacity" Value="1"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
     </Style>
         
     <Style Selector="Button.Standard /template/ ContentPresenter">
@@ -22,6 +26,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="#268bd2"/>
+        <Setter Property="Cursor" Value="Hand"/>
     </Style>
         
     <Style Selector="Button:pointerover.Standard /template/ ContentPresenter">
@@ -29,11 +34,6 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="#1e6fa8"/>
-    </Style>
-    
-    <Style Selector="Button.LinkButton">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
     </Style>
 </Styles>

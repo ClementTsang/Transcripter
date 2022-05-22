@@ -18,7 +18,7 @@
 
     <Panel Background="#2c2f33">
         <!-- <Button Name="HelpButton" -->
-        <!--         Classes="Icon" -->
+        <!--         Classes="NoBackground" -->
         <!--         HorizontalAlignment="Right" -->
         <!--         VerticalAlignment="Top" -->
         <!--         HorizontalContentAlignment="Center" -->
