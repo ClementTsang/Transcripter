@@ -69,7 +69,7 @@ type MainWindowViewModel() =
                         | Error (err) -> printfn ($"err: {err}")
 
                         stopWatch.Stop()
-                        printfn ($"time elapsed: {stopWatch.ElapsedMilliseconds / 1000L}"))
+                        printfn ($"time elapsed: {stopWatch.ElapsedMilliseconds / 1000L} seconds"))
                     |> Seq.toArray
                     |> ignore
                 | Error (err) -> printfn ($"err creating client: {err}")
