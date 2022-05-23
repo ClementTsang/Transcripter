@@ -30,13 +30,12 @@
         <!--     <DrawingPresenter Width="24" Height="24" Drawing="{DynamicResource BoxIcons.SolidInfoCircle}" /> -->
         <!-- </Button> -->
 
-        <Border HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="0, 20">
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0,20,0,0">
             <Panel>
-                <ContentControl Content="{Binding CurrentStepTracking}" />
-
-                <Panel VerticalAlignment="Center">
-                    <ContentControl Content="{Binding CurrentVM}" />
+                <Panel HorizontalAlignment="Center">
+                    <ContentControl Content="{Binding CurrentStepTracking}" />
                 </Panel>
+                <ContentControl Content="{Binding CurrentVM}" />
             </Panel>
         </Border>
     </Panel>

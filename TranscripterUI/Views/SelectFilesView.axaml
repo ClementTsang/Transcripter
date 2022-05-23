@@ -10,10 +10,10 @@
         <vm:SelectFilesViewModel />
     </Design.DataContext>
 
-    <StackPanel Spacing="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+    <StackPanel Spacing="20" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Grid>
-            <Ellipse Fill="#23272A" Width="100" Height="100" />
-            <DrawingPresenter Width="25" Height="25" Drawing="{DynamicResource BoxIcons.RegularPlus}" />
+            <Ellipse Fill="#23272A" Width="120" Height="120" />
+            <DrawingPresenter Width="30" Height="30" Drawing="{DynamicResource BoxIcons.RegularPlus}" />
         </Grid>
 
         <StackPanel Spacing="2">
@@ -38,7 +38,7 @@
                 HorizontalAlignment="Center"
                 FontSize="14"
                 FontFamily="{StaticResource OpenSans}"
-                Command="{Binding $parent[Window].DataContext.SelectFiles}" />
+                Command="{Binding $parent[Window].DataContext.SelectFilesCommand}" />
     </StackPanel>
 
 </UserControl>

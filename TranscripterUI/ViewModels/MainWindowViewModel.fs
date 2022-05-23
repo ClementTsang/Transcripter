@@ -11,20 +11,17 @@ type MainWindowViewModel() =
     inherit ViewModelBase()
 
     let csv = CurrentStepViewModel()
-
     let currentVM = ViewModelBase()
-
     member this.CurrentVM
         with get (): ViewModelBase = csv.GetCurrentStep.StepViewModel
         and set newVM =
             ignore
             <| this.RaiseAndSetIfChanged(ref currentVM, newVM)
-
+    static member Log = NLog.LogManager.GetCurrentClassLogger()
+    member val ShowSteps = false with get, set
     member val CurrentStepTracking = csv with get, set
-
     member val ShowOpenFileDialog = Interaction<Unit, List<string>>()
     member val CurrentlySelectedFiles = List.Empty with get, set
-
 
     member private this.SelectFilesAsync =
         fun () ->
@@ -32,15 +29,18 @@ type MainWindowViewModel() =
                 this
                     .ShowOpenFileDialog
                     .Handle(())
-                    .Subscribe(fun files ->
-                        printfn ($"selected files: {files}")
-                        this.CurrentlySelectedFiles <- files
+                    .Subscribe(
+                        fun files ->
+                            MainWindowViewModel.Log.Debug ($"selected files: {files}")
+                            this.CurrentlySelectedFiles <- files
 
-                        if not this.CurrentlySelectedFiles.IsEmpty then
-                            this.NextStep)
+                            if not this.CurrentlySelectedFiles.IsEmpty then
+                                this.NextStep
+//                                (this.CurrentVM :?> FileListViewModel).SetFileList(this.CurrentlySelectedFiles)
+                    )
                 |> ignore)
 
-    member this.SelectFiles =
+    member this.SelectFilesCommand =
         ReactiveCommand.CreateFromTask(this.SelectFilesAsync)
 
     member this.SetStepCommand(stepIndex: string) =
@@ -59,24 +59,24 @@ type MainWindowViewModel() =
 
                 match Transcripter.NewClient(true) with
                 | Ok client ->
-                    printfn ($"Files: {this.CurrentlySelectedFiles}")
+                    MainWindowViewModel.Log.Debug ($"Files: {this.CurrentlySelectedFiles}")
 
                     this.CurrentlySelectedFiles
                     |> Seq.map (fun file ->
                         let stopWatch =
                             System.Diagnostics.Stopwatch.StartNew()
 
-                        printfn ($"transcribing {file}")
+                        MainWindowViewModel.Log.Debug ($"transcribing {file}")
 
                         match Transcripter.Transcribe(client, file) with
-                        | Ok result -> printfn ($"ok: {result}")
-                        | Error err -> printfn ($"err: {err}")
+                        | Ok result -> MainWindowViewModel.Log.Debug $"ok: {result}"
+                        | Error err -> MainWindowViewModel.Log.Debug $"err: {err}"
 
                         stopWatch.Stop()
-                        printfn ($"time elapsed: {stopWatch.ElapsedMilliseconds / 1000L} seconds"))
+                        MainWindowViewModel.Log.Debug ($"time elapsed: {stopWatch.ElapsedMilliseconds / 1000L} seconds"))
                     |> Seq.toArray
                     |> ignore
-                | Error err -> printfn ($"err creating client: {err}")
+                | Error err -> MainWindowViewModel.Log.Debug ($"err creating client: {err}")
 
                 this.CurrentStepTracking.SetStepEnabled(true))
 

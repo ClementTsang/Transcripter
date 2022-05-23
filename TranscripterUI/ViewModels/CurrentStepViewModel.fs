@@ -8,9 +8,11 @@ type CurrentStepViewModel() =
     inherit ViewModelBase()
 
     let steps: List<string * ViewModelBase> =
-        [ ("Select Files", SelectFilesViewModel())
-          ("Configuration", ConfigureViewModel())
-          ("Go!", ProcessingViewModel()) ]
+        [
+         ("Select Files", SelectFilesViewModel());
+         ("Configuration", ConfigureViewModel());
+         ("Set Output", FileListViewModel());
+        ]
 
     let list =
         [ for index, (text, vm) in (steps |> List.indexed) ->
@@ -79,8 +81,6 @@ type CurrentStepViewModel() =
             this.CurrentStepIndex <- newStepIndex
 
     member this.SetStepCommand(stepIndex: string) =
-        printfn $"stepIndex: {stepIndex}"
-
         match System.Int32.TryParse stepIndex with
         | true, index -> this.SetStep(index)
         | _ -> ()
