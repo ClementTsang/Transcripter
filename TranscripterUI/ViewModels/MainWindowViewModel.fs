@@ -37,8 +37,7 @@ type MainWindowViewModel() =
                         this.CurrentlySelectedFiles <- files
 
                         if not this.CurrentlySelectedFiles.IsEmpty then
-                            this.CurrentStepTracking.NextStep
-                            this.CurrentVM <- this.CurrentStepTracking.GetCurrentStep.StepViewModel)
+                            this.NextStep)
                 |> ignore)
 
     member this.SelectFiles =
@@ -48,13 +47,18 @@ type MainWindowViewModel() =
         this.CurrentStepTracking.SetStepCommand(stepIndex)
         this.CurrentVM <- this.CurrentStepTracking.GetCurrentStep.StepViewModel
 
+    member private this.NextStep =
+        this.CurrentStepTracking.NextStep
+        this.CurrentVM <- this.CurrentStepTracking.GetCurrentStep.StepViewModel
+
     member private this.TranscribeTask =
         fun () ->
             Task.Factory.StartNew (fun () ->
-                this.CurrentStepTracking.DisableAllSteps
+                this.CurrentStepTracking.SetStepEnabled(false)
+                this.NextStep
 
                 match Transcripter.NewClient(true) with
-                | Ok (client) ->
+                | Ok client ->
                     printfn ($"Files: {this.CurrentlySelectedFiles}")
 
                     this.CurrentlySelectedFiles
@@ -65,16 +69,16 @@ type MainWindowViewModel() =
                         printfn ($"transcribing {file}")
 
                         match Transcripter.Transcribe(client, file) with
-                        | Ok (result) -> printfn ($"ok: {result}")
-                        | Error (err) -> printfn ($"err: {err}")
+                        | Ok result -> printfn ($"ok: {result}")
+                        | Error err -> printfn ($"err: {err}")
 
                         stopWatch.Stop()
                         printfn ($"time elapsed: {stopWatch.ElapsedMilliseconds / 1000L} seconds"))
                     |> Seq.toArray
                     |> ignore
-                | Error (err) -> printfn ($"err creating client: {err}")
+                | Error err -> printfn ($"err creating client: {err}")
 
-                this.CurrentStepTracking.EnableAllSteps)
+                this.CurrentStepTracking.SetStepEnabled(true))
 
     member this.Transcribe =
         ReactiveCommand.CreateFromTask(this.TranscribeTask)

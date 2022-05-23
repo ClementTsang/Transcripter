@@ -16,10 +16,12 @@
         <Compile Include="Models\Step.fs"/>
         <Compile Include="ViewModels\SelectFilesViewModel.fs"/>
         <Compile Include="ViewModels\ConfigureViewModel.fs"/>
+        <Compile Include="ViewModels\ProcessingViewModel.fs"/>
         <Compile Include="ViewModels\CurrentStepViewModel.fs"/>
         <Compile Include="ViewModels\MainWindowViewModel.fs"/>
         <Compile Include="Views\ConfigureView.fs"/>
         <Compile Include="Views\CurrentStepView.axaml.fs"/>
+        <Compile Include="Views\ProcessingView.axaml.fs"/>
         <Compile Include="Views\SelectFilesView.axaml.fs"/>
         <Compile Include="Views\MainWindow.axaml.fs"/>
         <Compile Include="ViewLocator.fs"/>

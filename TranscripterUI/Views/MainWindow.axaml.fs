@@ -44,8 +44,6 @@ type MainWindow() as this =
         dialog.Filters.Add(allFilter)
         dialog.Title <- "Select files to transcribe"
 
-        printfn ("Opening file dialog.")
-
         task {
             async {
                 interaction.SetOutput(
@@ -53,7 +51,7 @@ type MainWindow() as this =
                     |> Async.AwaitTask
                     |> Async.RunSynchronously
                     |> fun arr ->
-                        if isNull (arr) then
+                        if isNull arr then
                             List.Empty
                         else
                             Array.toList arr

@@ -10,7 +10,7 @@ type CurrentStepViewModel() =
     let steps: List<string * ViewModelBase> =
         [ ("Select Files", SelectFilesViewModel())
           ("Configuration", ConfigureViewModel())
-          ("Go!", ViewModelBase()) ]
+          ("Go!", ProcessingViewModel()) ]
 
     let list =
         [ for index, (text, vm) in (steps |> List.indexed) ->
@@ -40,15 +40,20 @@ type CurrentStepViewModel() =
     member this.PrevStep =
         this.SetStep(this.CurrentStepIndex - 1)
 
-    member this.EnableAllSteps =
-        this.SetStep(this.CurrentStepIndex, true)
+    member this.SetStepEnabled(enabled: bool) =
+        let oldSteps: Step [] =
+            Array.zeroCreate this.Steps.Count
 
-    member this.DisableAllSteps =
-        this.SetStep(this.CurrentStepIndex, false)
+        this.Steps.CopyTo(oldSteps, 0)
 
-    member this.SetStep(newStepIndex: int) = this.SetStep(newStepIndex, true)
+        oldSteps
+        |> Seq.indexed
+        |> Seq.iter (fun (index, step) ->
+            step.Enabled <- enabled
+            this.Steps.RemoveAt(index)
+            this.Steps.Insert(index, step))
 
-    member this.SetStep(newStepIndex: int, enabled: bool) =
+    member this.SetStep(newStepIndex: int) =
         if newStepIndex >= 0
            && newStepIndex < this.NumberSteps then
             // This is *really* inefficient but I'm kinda ??? on how to do this properly...
@@ -61,8 +66,6 @@ type CurrentStepViewModel() =
             oldSteps
             |> Seq.indexed
             |> Seq.iter (fun (index, step) ->
-                step.Enabled <- enabled
-
                 if index < newStepIndex then
                     step.ProgressState <- StepProgress.Completed
                 else if index = newStepIndex then
