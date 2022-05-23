@@ -72,8 +72,8 @@ module Transcripter =
                     Convert.ToUInt32(buffer.MaxSize / 2)
 
                 let result =
-                    client.SpeechToText(buffer.ShortBuffer, bufferSize)
-
+                    client.SpeechToTextWithMetadata(buffer.ShortBuffer, bufferSize, 1u)
+                    
                 buffer.Clear()
 
                 deleteIfExists wavPath
