@@ -11,12 +11,14 @@
 
 ### Install FFMpeg
 
-This program relies on FFMPeg to convert video and audio files into an appropriate format for speech-to-text. As such,
+This program relies on FFMpeg to convert video and audio files into an appropriate format for speech-to-text. As such,
 one must have FFMpeg installed on their computer and accessible on PATH.
 
 --- TODO: In progress ---
 
 ## Development
+
+To work on this, clone the repo and install FFMpeg, then run the setup script (`setup.sh`) to download all additional required files. (TODO)
 
 This project is written in F#, and as of writing, built on .NET Core 6.0.102. Personally, I wrote this on
 Linux and used Rider for development.

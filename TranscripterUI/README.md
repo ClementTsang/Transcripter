@@ -1,6 +1,6 @@
 # TranscripterUI
 
-The UI portion of the Transcripter program.
+The UI portion of the Transcripter program. Written with Avalonia.
 
 ## Credits
 
