@@ -9,15 +9,15 @@
     <Design.DataContext>
         <vm:ConfigureViewModel />
     </Design.DataContext>
-    
-    <Border Padding="35, 90, 35, 0">
+
+    <Border Padding="35, 80, 35, 0">
         <Grid RowDefinitions="*,70">
             <ScrollViewer Grid.Row="0">
-                <StackPanel Spacing="26" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
-                    <StackPanel Spacing="4">
+                <StackPanel Spacing="24" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
+                    <StackPanel Spacing="2">
                         <TextBlock HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
-                                   FontSize="26"
+                                   FontSize="28"
                                    FontWeight="Bold"
                                    Foreground="#fff"
                                    FontFamily="{StaticResource OpenSans}"
@@ -29,8 +29,8 @@
                                    FontFamily="{StaticResource OpenSans}"
                                    Text="Configure various transcription settings." />
                     </StackPanel>
-                    
-                    <StackPanel Spacing="4">
+
+                    <StackPanel Spacing="2">
                         <TextBlock HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    FontSize="20"
@@ -46,19 +46,19 @@
                                    Text="The type of transcript file to create." />
                         <ComboBox Items="{Binding SupportedTypes}"
                                   Width="80"
-                                  Margin="0,6,0,0"
+                                  Margin="0,4,0,0"
                                   Cursor="Hand"
-                                  SelectedIndex="{Binding OutputSelectedIndex}">
+                                  SelectedIndex="{Binding OutputSelectedIndex, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding }"
-                                               FontFamily="{StaticResource OpenSans}"/>
+                                               FontFamily="{StaticResource OpenSans}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-                    
-                    <StackPanel Spacing="4">
+
+                    <StackPanel Spacing="2">
                         <TextBlock HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    FontSize="20"
@@ -72,80 +72,99 @@
                                    Foreground="#99AAB5"
                                    FontFamily="{StaticResource OpenSans}"
                                    TextWrapping="Wrap"
-                                   Text="Whether to overwrite output files if needed. If set to 'No', the transcription will simply fail if there is a conflicting file." />
+                                   Text="Whether to overwrite output files if needed; if set to 'No', then no file is written if there is a conflicting file." />
                         <ComboBox Items="{Binding OverwriteComboOptions}"
                                   Width="80"
                                   Cursor="Hand"
-                                  Margin="0,6,0,0"
-                                  SelectedIndex="{Binding OverwriteSelectedIndex}">
+                                  Margin="0,4,0,0"
+                                  SelectedIndex="{Binding OverwriteSelectedIndex, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding }"
-                                               FontFamily="{StaticResource OpenSans}"/>
+                                               FontFamily="{StaticResource OpenSans}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-                    
-                    <StackPanel Spacing="4">
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   Foreground="#fff"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   Text="Threads" />
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   TextWrapping="Wrap"
-                                   FontSize="14"
-                                   Foreground="#99AAB5"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   Text="EXPERIMENTAL: The max number of transcription tasks that can run at the same time. Note that Transcripter may crash if this is not set to 1, so its best to not touch this for now." />
-                        <Slider Cursor="Hand"
-                                HorizontalAlignment="Stretch"
-                                Foreground="#268bd2"
-                                IsSnapToTickEnabled="True"
-                                Ticks="{Binding MaxCPUs}"
-                                TickFrequency="1"
-                                TickPlacement="Outside"
-                                Margin="0,0,35,0"
-                                Value="{Binding NumCPUs, Mode=TwoWay}"
-                                SmallChange="1"
-                                Maximum="{Binding MaxCPUs}"
-                                Minimum="1"/>
-                        <StackPanel Margin="0,-8,0,0" Orientation="Horizontal">
+
+                    <StackPanel Margin="0,16,0,0" Spacing="24">
+                        <StackPanel Spacing="2">
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
-                                       FontSize="12"
-                                       Foreground="#99AAB5"
+                                       FontSize="26"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="Number of threads: " />
+                                       Text="Experimental" />
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
-                                       FontSize="12"
+                                       FontSize="16"
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="{Binding NumCPUs}" />
+                                       TextWrapping="Wrap"
+                                       Text="Some experimental settings." />
                         </StackPanel>
-                        <StackPanel Margin="0,-4,0,0" Orientation="Horizontal">
+
+                        <StackPanel Spacing="2">
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
-                                       FontSize="12"
-                                       Foreground="#99AAB5"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="Max number of threads: " />
+                                       Text="Threads" />
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
-                                       FontSize="12"
+                                       TextWrapping="Wrap"
+                                       FontSize="14"
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="{Binding MaxCPUs}" />
+                                       Text="The maximum number of transcription tasks that can run at the same time. Note that Transcripter may crash if this is not set to 1, so its best to not touch this for now." />
+                            <Slider Cursor="Hand"
+                                    HorizontalAlignment="Stretch"
+                                    Foreground="#268bd2"
+                                    IsSnapToTickEnabled="True"
+                                    Ticks="{Binding MaxCPUs}"
+                                    TickFrequency="1"
+                                    TickPlacement="Outside"
+                                    Margin="0,0,35,0"
+                                    Value="{Binding NumCPUs, Mode=TwoWay}"
+                                    SmallChange="1"
+                                    Maximum="{Binding MaxCPUs}"
+                                    Minimum="1" />
+                            <StackPanel Margin="0,-8,0,0" Orientation="Horizontal">
+                                <TextBlock HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           Foreground="#99AAB5"
+                                           FontFamily="{StaticResource OpenSans}"
+                                           Text="Number of threads: " />
+                                <TextBlock HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           Foreground="#99AAB5"
+                                           FontFamily="{StaticResource OpenSans}"
+                                           Text="{Binding NumCPUs}" />
+                            </StackPanel>
+                            <StackPanel Margin="0,-4,0,0" Orientation="Horizontal">
+                                <TextBlock HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           Foreground="#99AAB5"
+                                           FontFamily="{StaticResource OpenSans}"
+                                           Text="Max number of threads: " />
+                                <TextBlock HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           Foreground="#99AAB5"
+                                           FontFamily="{StaticResource OpenSans}"
+                                           Text="{Binding MaxCPUs}" />
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
-            
+
             <Button Classes="Standard"
                     Grid.Row="1"
                     Margin="15,0"

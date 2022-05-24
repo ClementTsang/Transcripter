@@ -51,7 +51,8 @@ type Step(num: int, text: string, vm: ViewModelBase, isLast: bool, progress: Ste
     member this.IsCompleted =
         match this.ProgressState with
         | StepProgress.Completed -> true
-        | StepProgress.InProgress | StepProgress.Upcoming -> false
+        | StepProgress.InProgress
+        | StepProgress.Upcoming -> false
 
     member this.IsEnabled =
         this.Enabled

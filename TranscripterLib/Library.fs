@@ -2,7 +2,6 @@
 
 open System
 open System.IO
-open System.Threading
 open FFMpegCore
 open Microsoft.VisualBasic.FileIO
 open NAudio.Wave
@@ -12,11 +11,14 @@ module Transcripter =
     let private deleteIfExists filePath =
         if File.Exists filePath then
             File.Delete filePath
-            
+
     let public PotentiallyValidFile (inputPath: string) =
         task {
-            let! probe = FFProbe.AnalyseAsync(inputPath)
-            return probe.AudioStreams.Count > 0
+            try
+                let! probe = FFProbe.AnalyseAsync(inputPath)
+                return probe.AudioStreams.Count > 0
+            with
+            | _ -> return false
         }
 
     let public NewClient (useScorer: bool) =
@@ -80,7 +82,7 @@ module Transcripter =
 
                 let result =
                     client.SpeechToTextWithMetadata(buffer.ShortBuffer, bufferSize, 1u)
-                    
+
                 buffer.Clear()
 
                 deleteIfExists wavPath

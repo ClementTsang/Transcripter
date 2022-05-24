@@ -36,12 +36,13 @@
         <Setter Property="Background" Value="#1e6fa8" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
-    
+
     <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
-        <Setter Property="Background" Value="#268bd2"/>
+        <Setter Property="Background" Value="#268bd2" />
     </Style>
-    
+
     <Style Selector="ComboBoxItem:selected:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="#1e6fa8"/>
+        <Setter Property="Background" Value="#1e6fa8" />
     </Style>
+
 </Styles>

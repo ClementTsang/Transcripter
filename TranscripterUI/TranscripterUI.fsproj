@@ -7,52 +7,52 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     </PropertyGroup>
     <ItemGroup>
-        <Folder Include="Models\" />
-        <AvaloniaResource Include="Assets\**" />
-        <None Remove=".gitignore" />
+        <Folder Include="Models\"/>
+        <AvaloniaResource Include="Assets\**"/>
+        <None Remove=".gitignore"/>
         <None Include="NLog.config">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ViewModels\ViewModelBase.fs" />
-        <Compile Include="Models\Step.fs" />
-        <Compile Include="Models\FileConfiguration.fs" />
-        <Compile Include="ViewModels\SelectFilesViewModel.fs" />
-        <Compile Include="ViewModels\ConfigureViewModel.fs" />
-        <Compile Include="ViewModels\ProcessingViewModel.fs" />
-        <Compile Include="ViewModels\FileListViewModel.fs" />
-        <Compile Include="ViewModels\CurrentStepViewModel.fs" />
-        <Compile Include="ViewModels\MainWindowViewModel.fs" />
-        <Compile Include="Views\ConfigureView.fs" />
-        <Compile Include="Views\CurrentStepView.axaml.fs" />
-        <Compile Include="Views\FileListView.axaml.fs" />
-        <Compile Include="Views\ProcessingView.axaml.fs" />
-        <Compile Include="Views\SelectFilesView.axaml.fs" />
-        <Compile Include="Views\MainWindow.axaml.fs" />
-        <Compile Include="ViewLocator.fs" />
-        <Compile Include="App.axaml.fs" />
-        <Compile Include="Program.fs" />
+        <Compile Include="ViewModels\ViewModelBase.fs"/>
+        <Compile Include="Models\Step.fs"/>
+        <Compile Include="Models\FileConfiguration.fs"/>
+        <Compile Include="ViewModels\SelectFilesViewModel.fs"/>
+        <Compile Include="ViewModels\ConfigureViewModel.fs"/>
+        <Compile Include="ViewModels\ProcessingViewModel.fs"/>
+        <Compile Include="ViewModels\FileListViewModel.fs"/>
+        <Compile Include="ViewModels\CurrentStepViewModel.fs"/>
+        <Compile Include="ViewModels\MainWindowViewModel.fs"/>
+        <Compile Include="Views\ConfigureView.fs"/>
+        <Compile Include="Views\CurrentStepView.axaml.fs"/>
+        <Compile Include="Views\FileListView.axaml.fs"/>
+        <Compile Include="Views\ProcessingView.axaml.fs"/>
+        <Compile Include="Views\SelectFilesView.axaml.fs"/>
+        <Compile Include="Views\MainWindow.axaml.fs"/>
+        <Compile Include="ViewLocator.fs"/>
+        <Compile Include="App.axaml.fs"/>
+        <Compile Include="Program.fs"/>
     </ItemGroup>
     <ItemGroup>
         <!--This helps with theme dll-s trimming.
         If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
         https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
-        <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
-        <TrimmableAssembly Include="Avalonia.Themes.Default" />
+        <TrimmableAssembly Include="Avalonia.Themes.Fluent"/>
+        <TrimmableAssembly Include="Avalonia.Themes.Default"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.13" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.13" />
+        <PackageReference Include="Avalonia" Version="0.10.13"/>
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.13"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.13" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.13" />
-        <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0" />
-        <PackageReference Include="NLog" Version="5.0.0" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.13"/>
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.13"/>
+        <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0"/>
+        <PackageReference Include="NLog" Version="5.0.0"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj" />
-        <ProjectReference Include="..\TranscripterLib\TranscripterLib.fsproj" />
+        <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj"/>
+        <ProjectReference Include="..\TranscripterLib\TranscripterLib.fsproj"/>
     </ItemGroup>
     <ItemGroup>
         <Content Include="..\..\ramblings\transcripter.md">
@@ -61,12 +61,12 @@
         <Content Include="..\README.md">
             <Link>README.md</Link>
         </Content>
-        <Content Include="README.md" />
+        <Content Include="README.md"/>
     </ItemGroup>
     <ItemGroup>
-        <AvaloniaXaml Remove="Icons\**" />
+        <AvaloniaXaml Remove="Icons\**"/>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Remove="Icons\**" />
+        <EmbeddedResource Remove="Icons\**"/>
     </ItemGroup>
 </Project>

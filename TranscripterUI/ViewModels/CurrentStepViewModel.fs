@@ -8,11 +8,9 @@ type CurrentStepViewModel() =
     inherit ViewModelBase()
 
     let steps: List<string * ViewModelBase> =
-        [
-         ("Select Files", SelectFilesViewModel());
-         ("Configuration", ConfigureViewModel());
-         ("Set Output", FileListViewModel());
-        ]
+        [ ("Select Files", SelectFilesViewModel())
+          ("Configuration", ConfigureViewModel())
+          ("Set Output", FileListViewModel()) ]
 
     let list =
         [ for index, (text, vm) in (steps |> List.indexed) ->
