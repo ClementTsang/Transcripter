@@ -18,7 +18,8 @@ one must have FFMpeg installed on their computer and accessible on PATH.
 
 ## Development
 
-To work on this, clone the repo and install FFMpeg, then run the setup script (`setup.sh`) to download all additional required files. (TODO)
+To work on this, clone the repo and install FFMpeg, then run the setup script (`setup.sh`) to download all additional
+required files. (TODO)
 
 This project is written in F#, and as of writing, built on .NET Core 6.0.102. Personally, I wrote this on
 Linux and used Rider for development.
@@ -47,7 +48,7 @@ the model/scorer itself can be found from Coqui's website [here](https://coqui.a
 ### Running
 
 If you're running via something like Rider's Run, you may need to set the `LD_LIBRARY_PATH` environment variable
-to not  be blank (if it is) for the STT shared libraries to be detected. For example:
+to not be blank (if it is) for the STT shared libraries to be detected. For example:
 
 ```bash
 LD_LIBRARY_PATH=:

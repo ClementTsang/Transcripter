@@ -11,98 +11,149 @@
     </Design.DataContext>
 
     <Border Padding="35, 80, 35, 0">
-        <Grid RowDefinitions="*,70">
+        <Grid RowDefinitions="*,80">
             <ScrollViewer Grid.Row="0">
-                <StackPanel Spacing="24" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
-                    <StackPanel Spacing="2">
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Foreground="#fff"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   Text="Configuration" />
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   FontSize="16"
-                                   Foreground="#99AAB5"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   Text="Configure various transcription settings." />
-                    </StackPanel>
-
-                    <StackPanel Spacing="2">
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   Foreground="#fff"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   Text="Output Format" />
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   FontSize="14"
-                                   Foreground="#99AAB5"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   Text="The type of transcript file to create." />
-                        <ComboBox Items="{Binding SupportedTypes}"
-                                  Width="80"
-                                  Margin="0,4,0,0"
-                                  Cursor="Hand"
-                                  SelectedIndex="{Binding OutputSelectedIndex, Mode=TwoWay}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding }"
-                                               FontFamily="{StaticResource OpenSans}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-
-                    <StackPanel Spacing="2">
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   Foreground="#fff"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   Text="Overwrite" />
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   FontSize="14"
-                                   Foreground="#99AAB5"
-                                   FontFamily="{StaticResource OpenSans}"
-                                   TextWrapping="Wrap"
-                                   Text="Whether to overwrite output files if needed; if set to 'No', then no file is written if there is a conflicting file." />
-                        <ComboBox Items="{Binding OverwriteComboOptions}"
-                                  Width="80"
-                                  Cursor="Hand"
-                                  Margin="0,4,0,0"
-                                  SelectedIndex="{Binding OverwriteSelectedIndex, Mode=TwoWay}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding }"
-                                               FontFamily="{StaticResource OpenSans}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-
-                    <StackPanel Margin="0,16,0,0" Spacing="24">
+                <StackPanel Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
+                    <StackPanel Name="Configuration" Spacing="24">
                         <StackPanel Spacing="2">
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
-                                       FontSize="26"
+                                       FontSize="28"
                                        FontWeight="Bold"
                                        Foreground="#fff"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="Experimental" />
+                                       Text="Configuration" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="16"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Configure various transcription settings." />
+                        </StackPanel>
+
+                        <StackPanel Spacing="2">
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Output Format" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="The type of transcript file to create." />
+                            <ComboBox Items="{Binding SupportedTypes}"
+                                      Width="80"
+                                      Margin="0,4,0,0"
+                                      Cursor="Hand"
+                                      SelectedIndex="{Binding OutputSelectedIndex, Mode=TwoWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding }"
+                                                   FontFamily="{StaticResource OpenSans}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Spacing="2">
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Overwrite" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       TextWrapping="Wrap"
+                                       Text="Whether to overwrite output files if needed; if set to 'No', then no file is written if there is a conflicting file." />
+                            <ComboBox Items="{Binding OverwriteComboOptions}"
+                                      Width="80"
+                                      Cursor="Hand"
+                                      Margin="0,4,0,0"
+                                      SelectedIndex="{Binding OverwriteSelectedIndex, Mode=TwoWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding }"
+                                                   FontFamily="{StaticResource OpenSans}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Spacing="2">
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Max Word Length" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       TextWrapping="Wrap"
+                                       Text="The maximum number of words in a single subtitle line before splitting into a separate line. Defaults to 10." />
+
+                            <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
+                                <NumericUpDown Cursor="Ibeam"
+                                               Minimum="1"
+                                               Value="{Binding MaxWordLength, Mode=TwoWay}"
+                                               Watermark="10000" />
+                            </Panel>
+                        </StackPanel>
+                        
+                        <StackPanel Spacing="2">
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Max Word Length" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       TextWrapping="Wrap"
+                                       Text="The maximum length of a line in terms of characters before splitting into a separate line. Defaults to 10000." />
+
+                            <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
+                                <NumericUpDown Cursor="Ibeam"
+                                               Minimum="1"
+                                               Value="{Binding MaxLineLength, Mode=TwoWay}"
+                                               Watermark="10000" />
+                            </Panel>
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <StackPanel Name="Advanced" Spacing="24">
+                        <StackPanel Spacing="2">
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="28"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Advanced" />
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        FontSize="16"
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
                                        TextWrapping="Wrap"
-                                       Text="Some experimental settings." />
+                                       Text="Advanced settings - only touch if you know what you are doing." />
                         </StackPanel>
 
                         <StackPanel Spacing="2">
@@ -119,7 +170,7 @@
                                        FontSize="14"
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="The maximum number of transcription tasks that can run at the same time. Note that Transcripter may crash if this is not set to 1, so its best to not touch this for now." />
+                                       Text="EXPERIMENTAL - The maximum number of transcription tasks that can run at the same time. Note that Transcripter may crash if this is not set to 1, so its best to not touch this for now." />
                             <Slider Cursor="Hand"
                                     HorizontalAlignment="Stretch"
                                     Foreground="#268bd2"
@@ -162,6 +213,7 @@
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
+
                 </StackPanel>
             </ScrollViewer>
 

@@ -1,5 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Original source: https://github.com/ahopper/Avalonia.IconPacks -->
+    <!-- Remove unneeded icons  -->
     <Style>
         <Style.Resources>
             <GeometryDrawing x:Key="BoxIcons.Logos_500px" Brush="#ff2c2f33"

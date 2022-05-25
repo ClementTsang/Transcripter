@@ -13,9 +13,11 @@ type ConfigureViewModel() =
 
     member this.NumCPUs
         with get (): int = numCPUs
-        and set v =
-            if numCPUs <> v then
-                numCPUs <- v
+        and set newVal =
+            if numCPUs <> newVal
+               && newVal >= 0
+               && newVal <= this.MaxCPUs then
+                numCPUs <- newVal
                 this.RaisePropertyChanged("NumCPUs")
 
     member val MaxCPUs = Environment.ProcessorCount
@@ -27,3 +29,7 @@ type ConfigureViewModel() =
 
     member val OverwriteComboOptions = [ "Yes"; "No" ]
     member val OverwriteSelectedIndex = 1 with get, set
+
+    member val MaxWordLength = 10 with get, set
+    
+    member val MaxLineLength = 10000 with get, set

@@ -2,8 +2,10 @@
 
 open System.Runtime.Serialization
 open System.Threading.Tasks
+open FSharp.Collections.ParallelSeq
 open ReactiveUI
 open TranscripterLib
+open TranscripterUI.Models
 open TranscripterUI.ViewModels
 
 [<DataContract>]
@@ -35,16 +37,29 @@ type MainWindowViewModel() =
                     .Handle(())
                     .Subscribe(fun files ->
                         MainWindowViewModel.Log.Debug($"selected files: {files}")
-                        this.CurrentlySelectedFiles <- files
 
-                        if not this.CurrentlySelectedFiles.IsEmpty then
-                            this.NextStep
-                        //                                (this.CurrentVM :?> FileListViewModel).SetFileList(this.CurrentlySelectedFiles)
-                        )
+                        if not (files.IsEmpty) then
+                            this.CheckAndThenAddFiles files)
                 |> ignore)
 
     member this.SelectFilesCommand =
         ReactiveCommand.CreateFromTask(this.SelectFilesAsync)
+
+    member this.CheckAndThenAddFiles files =
+        let fileConfigList =
+            files |> PSeq.map FileConfig |> Seq.toList
+
+        let invalidList =
+            fileConfigList
+            |> Seq.filter (fun file -> not (file.IsValid))
+            |> Seq.map (fun file -> file.InputFile)
+            |> Seq.toList
+
+        if invalidList.IsEmpty then
+            this.CurrentlySelectedFiles <- fileConfigList
+            this.NextStep
+        else
+            ()
 
     member this.SetStepCommand(stepIndex: string) =
         this.CurrentStepTracking.SetStepCommand(stepIndex)
@@ -65,19 +80,20 @@ type MainWindowViewModel() =
                     MainWindowViewModel.Log.Debug($"Files: {this.CurrentlySelectedFiles}")
 
                     this.CurrentlySelectedFiles
-                    |> Seq.map (fun file ->
+                    |> PSeq.withDegreeOfParallelism (1)
+                    |> PSeq.map (fun file ->
                         let stopWatch =
                             System.Diagnostics.Stopwatch.StartNew()
 
                         MainWindowViewModel.Log.Debug($"transcribing {file}")
 
-                        match Transcripter.Transcribe(client, file) with
+                        match Transcripter.Transcribe(client, file.InputFile) with
                         | Ok result -> MainWindowViewModel.Log.Debug $"ok: {result}"
                         | Error err -> MainWindowViewModel.Log.Debug $"err: {err}"
 
                         stopWatch.Stop()
                         MainWindowViewModel.Log.Debug($"time elapsed: {stopWatch.ElapsedMilliseconds / 1000L} seconds"))
-                    |> Seq.toArray
+                    |> PSeq.toArray
                     |> ignore
                 | Error err -> MainWindowViewModel.Log.Debug($"err creating client: {err}")
 
