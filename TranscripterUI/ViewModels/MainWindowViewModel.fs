@@ -13,13 +13,13 @@ type MainWindowViewModel() =
     inherit ViewModelBase()
 
     let csv = CurrentStepViewModel()
-    let currentVM = ViewModelBase()
+    let mutable currentVM = csv.GetCurrentStep.StepViewModel
 
     member this.CurrentVM
-        with get (): ViewModelBase = csv.GetCurrentStep.StepViewModel
+        with get (): ViewModelBase = currentVM
         and set newVM =
-            ignore
-            <| this.RaiseAndSetIfChanged(ref currentVM, newVM)
+            currentVM <- newVM
+            this.RaisePropertyChanged("CurrentVM")
 
     static member Log =
         NLog.LogManager.GetCurrentClassLogger()
@@ -57,15 +57,20 @@ type MainWindowViewModel() =
 
         if invalidList.IsEmpty then
             this.CurrentlySelectedFiles <- fileConfigList
-            this.NextStep
+            this.NextStep()
         else
-            ()
+            let vm = InvalidFilesViewModel()
+            vm.InvalidFiles <- invalidList |> Seq.map(fun file -> InvalidFile(file, "Missing audio stream")) |> Seq.toList // Hardcoded for now
+            this.CurrentVM <- vm
+            
+    member this.ReselectFiles() =
+        this.SetStepCommand("0")
 
     member this.SetStepCommand(stepIndex: string) =
         this.CurrentStepTracking.SetStepCommand(stepIndex)
         this.CurrentVM <- this.CurrentStepTracking.GetCurrentStep.StepViewModel
 
-    member private this.NextStep =
+    member private this.NextStep() =
         this.CurrentStepTracking.NextStep
         this.CurrentVM <- this.CurrentStepTracking.GetCurrentStep.StepViewModel
 
@@ -73,9 +78,9 @@ type MainWindowViewModel() =
         fun () ->
             Task.Factory.StartNew (fun () ->
                 this.CurrentStepTracking.SetStepEnabled(false)
-                this.NextStep
+                this.NextStep()
 
-                match Transcripter.NewClient(true) with
+                match Transcripter.NewClient(true, None, None) with
                 | Ok client ->
                     MainWindowViewModel.Log.Debug($"Files: {this.CurrentlySelectedFiles}")
 

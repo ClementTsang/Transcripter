@@ -21,12 +21,16 @@ module Transcripter =
             | _ -> return false
         }
 
-    let public NewClient (useScorer: bool) =
+    let public NewClient (useScorer: bool, modelFilePath: Option<string>, scorerFilePath: Option<string>) =
         let modelFile =
-            Path.Combine(Environment.CurrentDirectory, @"model/english_huge_1.0.0_model.tflite")
+            match modelFilePath with
+            | Some (path) -> path
+            | None -> Path.Combine(Environment.CurrentDirectory, @"model/english_huge_1.0.0_model.tflite")
 
         let scorerFile =
-            Path.Combine(Environment.CurrentDirectory, @"model/huge-vocabulary.scorer")
+            match scorerFilePath with
+            | Some (path) -> path
+            | None -> Path.Combine(Environment.CurrentDirectory, @"model/huge-vocabulary.scorer")
 
         if not (File.Exists modelFile) then
             Error("Failed to load model file.")
@@ -47,8 +51,7 @@ module Transcripter =
             let wavPath =
                 let tmp = FileSystem.GetTempFileName()
 
-                let newName =
-                    Path.ChangeExtension(tmp, "wav")
+                let newName = Path.ChangeExtension(tmp, "wav")
 
                 if File.Exists(tmp) && not (File.Exists(newName)) then
                     FileSystem.MoveFile(tmp, newName)
@@ -77,11 +80,9 @@ module Transcripter =
 
                 let buffer = WaveBuffer inputBytes
 
-                let bufferSize =
-                    Convert.ToUInt32(buffer.MaxSize / 2)
+                let bufferSize = Convert.ToUInt32(buffer.MaxSize / 2)
 
-                let result =
-                    client.SpeechToTextWithMetadata(buffer.ShortBuffer, bufferSize, 1u)
+                let result = client.SpeechToTextWithMetadata(buffer.ShortBuffer, bufferSize, 1u)
 
                 buffer.Clear()
 

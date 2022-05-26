@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:TranscripterUI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="TranscripterUI.Views.InvalidFilesView">
+    
+    <Design.DataContext>
+        <viewModels:InvalidFilesViewModel />
+    </Design.DataContext>
+    
+    <Border Padding="35, 80, 35, 0">
+        <Grid RowDefinitions="Auto,*,80">
+            <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
+                <StackPanel Spacing="2">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Selection Failed" />
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Foreground="#99AAB5"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Some problems were found with some of the selected files." />
+                </StackPanel>
+            </StackPanel>
+            
+            <Grid Grid.Row="1" Margin="15,16,15,0" RowDefinitions="Auto,10,*">
+                <Grid ColumnDefinitions="*,10,*" Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Grid.Column="0"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="File Name" />
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               FontSize="14"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Error" />
+                </Grid>
+                <ScrollViewer Grid.Row="2">
+                    <ItemsControl Items="{Binding InvalidFiles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,10,*">
+                                    <TextBlock HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Grid.Column="0"
+                                               FontSize="14"
+                                               Foreground="#fff"
+                                               TextTrimming="CharacterEllipsis"
+                                               FontFamily="{StaticResource OpenSans}"
+                                               Text="{Binding Name}" />
+                                    <TextBlock HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Grid.Column="2"
+                                               FontSize="14"
+                                               Foreground="#fff"
+                                               TextTrimming="CharacterEllipsis"
+                                               FontFamily="{StaticResource OpenSans}"
+                                               Text="{Binding Error}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <Button Name="SelectFiles"
+                    Grid.Row="2"
+                    Margin="15,0"
+                    Classes="Standard"
+                    Content="Reselect Files"
+                    Width="130"
+                    HorizontalAlignment="Left"
+                    FontSize="14"
+                    FontFamily="{StaticResource OpenSans}"
+                    Command="{Binding $parent[Window].DataContext.ReselectFiles}"/>
+        </Grid>
+    </Border>
+</UserControl>

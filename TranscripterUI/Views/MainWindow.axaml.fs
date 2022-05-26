@@ -20,8 +20,6 @@ type MainWindow() as this =
         AvaloniaXamlLoader.Load(this)
         this.BindSelectFileDialog()
 
-    member private this.ShowInvalidFileWindow(interaction: InteractionContext<List<string>, List<string>>) = ()
-
     member private this.BindSelectFileDialog() =
         this.WhenActivated (fun (disposable: CompositeDisposable) ->
             let handler =
