@@ -31,13 +31,13 @@ type CurrentStepViewModel() =
 
     member val NumberSteps = steps.Length with get, set
 
-    member this.GetCurrentStep =
+    member this.GetCurrentStep() =
         this.Steps[this.CurrentStepIndex]
 
-    member this.NextStep =
+    member this.NextStep() =
         this.SetStep(this.CurrentStepIndex + 1)
 
-    member this.PrevStep =
+    member this.PrevStep() =
         this.SetStep(this.CurrentStepIndex - 1)
 
     member this.SetStepEnabled(enabled: bool) =

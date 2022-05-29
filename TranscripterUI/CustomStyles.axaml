@@ -10,6 +10,7 @@
     <Style Selector="Button.NoBackground /template/ ContentPresenter">
         <Setter Property="Background" Value="transparent" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Opacity" Value="1.0"/>
         <Setter Property="Padding" Value="0" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
@@ -17,6 +18,23 @@
     <Style Selector="Button:pointerover.NoBackground /template/ ContentPresenter">
         <Setter Property="Background" Value="transparent" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Opacity" Value="0.6"/>
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    
+    <Style Selector="Button.InvertNoBackground /template/ ContentPresenter">
+        <Setter Property="Background" Value="transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Opacity" Value="0.6"/>
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="Button:pointerover.InvertNoBackground /template/ ContentPresenter">
+        <Setter Property="Background" Value="transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Opacity" Value="1.0"/>
         <Setter Property="Padding" Value="0" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>

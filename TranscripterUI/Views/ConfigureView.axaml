@@ -13,7 +13,7 @@
     <Border Padding="35, 80, 35, 0">
         <Grid RowDefinitions="*,80">
             <ScrollViewer Grid.Row="0">
-                <StackPanel Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
+                <StackPanel Spacing="48" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
                     <StackPanel Name="Configuration" Spacing="24">
                         <StackPanel Spacing="2">
                             <TextBlock HorizontalAlignment="Left"
@@ -45,7 +45,7 @@
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
                                        Text="The type of transcript file to create." />
-                            <ComboBox Items="{Binding SupportedTypes}"
+                            <ComboBox Items="{Binding SupportedTypeStrings}"
                                       Width="80"
                                       Margin="0,4,0,0"
                                       Cursor="Hand"
@@ -224,7 +224,7 @@
                     Width="120"
                     FontSize="14"
                     FontFamily="{StaticResource OpenSans}"
-                    Command="{Binding}" />
+                    Command="{Binding $parent[Window].DataContext.ToFileListReview}" />
         </Grid>
     </Border>
 

@@ -5,6 +5,20 @@ open System
 open System.Runtime.Serialization
 open TranscripterUI.ViewModels
 
+type FileType =
+    | SRT
+    | VTT
+    
+    member this.ToString =
+        match this with
+        | SRT -> "SRT"
+        | VTT -> "VTT"
+        
+    member this.FileFormat =
+        match this with
+        | SRT -> "srt"
+        | VTT -> "vtt"
+
 [<DataContract>]
 type ConfigureViewModel() =
     inherit ViewModelBase()
@@ -22,10 +36,11 @@ type ConfigureViewModel() =
 
     member val MaxCPUs = Environment.ProcessorCount
 
-    member val SupportedTypes = [ "SRT"; "VTT" ]
+    static member val SupportedTypes = [ FileType.SRT; FileType.VTT ]
+    static member SupportedTypeStrings =
+        ConfigureViewModel.SupportedTypes |> Seq.map(fun f -> f.ToString) |> Seq.toList
 
     member val OutputSelectedIndex = 0 with get, set
-
 
     member val OverwriteComboOptions = [ "Yes"; "No" ]
     member val OverwriteSelectedIndex = 1 with get, set

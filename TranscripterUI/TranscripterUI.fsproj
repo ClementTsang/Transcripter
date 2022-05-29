@@ -17,7 +17,7 @@
     <ItemGroup>
         <Compile Include="ViewModels\ViewModelBase.fs" />
         <Compile Include="Models\Step.fs" />
-        <Compile Include="Models\FileConfiguration.fs" />
+        <Compile Include="Models\InputFile.fs" />
         <Compile Include="ViewModels\SelectFilesViewModel.fs" />
         <Compile Include="ViewModels\ConfigureViewModel.fs" />
         <Compile Include="ViewModels\ProcessingViewModel.fs" />
@@ -57,9 +57,6 @@
         <ProjectReference Include="..\TranscripterLib\TranscripterLib.fsproj" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include="..\..\ramblings\transcripter.md">
-            <Link>transcripter.md</Link>
-        </Content>
         <Content Include="..\README.md">
             <Link>README.md</Link>
         </Content>

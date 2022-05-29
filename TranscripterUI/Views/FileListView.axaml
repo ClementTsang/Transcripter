@@ -10,53 +10,94 @@
         <viewModels:FileListViewModel />
     </Design.DataContext>
 
-    <ScrollViewer Padding="40, 80, 40, 0">
-        <StackPanel Spacing="24" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <StackPanel Spacing="4">
-                <TextBlock HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           FontSize="26"
-                           FontWeight="Bold"
-                           Foreground="#fff"
-                           FontFamily="{StaticResource OpenSans}"
-                           Text="Files" />
-                <TextBlock HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           FontSize="16"
-                           Foreground="#99AAB5"
-                           FontFamily="{StaticResource OpenSans}"
-                           Text="Configure your selected files and where to save outputs" />
+    <Border Padding="35, 80, 35, 0">
+        <Grid RowDefinitions="Auto,*,80">
+            <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
+                <StackPanel Spacing="4">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="File Overview" />
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Foreground="#99AAB5"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Review your selected files and where to save transcripts." />
+                </StackPanel>
             </StackPanel>
+            
+            <Grid Grid.Row="1" Margin="15,16,0,0" RowDefinitions="Auto,10,*">
+                <Grid ColumnDefinitions="*,10,*,20" Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Grid.Column="0"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="File Name" />
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               FontSize="14"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Output File" />
+                </Grid>
+                <ScrollViewer Grid.Row="2">
+                    <ItemsControl Items="{Binding FileListConfiguration}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,10,*,20">
+                                    <TextBlock HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Grid.Column="0"
+                                               FontSize="14"
+                                               Foreground="#fff"
+                                               TextTrimming="CharacterEllipsis"
+                                               FontFamily="{StaticResource OpenSans}"
+                                               Text="{Binding In}" />
+                                    <Grid Grid.Column="2" ColumnDefinitions="*, 10, Auto" VerticalAlignment="Center">
+                                        <TextBlock HorizontalAlignment="Left"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="14"
+                                                   Foreground="#fff"
+                                                   Grid.Column="0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   FontFamily="{StaticResource OpenSans}"
+                                                   Text="{Binding Out}" />
+                                        <Button Classes="InvertNoBackground"
+                                                Grid.Column="2"
+                                                VerticalContentAlignment="Center"
+                                                HorizontalContentAlignment="Center"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SetOutputFile}"
+                                                CommandParameter="{Binding Index}">
+                                            <DrawingPresenter Margin="0,1.5,0,0" Width="16" Height="16" Drawing="{DynamicResource BoxIcons.SolidPencil}" />
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
 
-            <ItemsControl Items="{Binding FileListConfiguration}">
-
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Grid IsSharedSizeScope="True" ColumnDefinitions="0.5*,0.5*,Auto" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="14"
-                                       FontWeight="Bold"
-                                       Foreground="#fff"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       Text="Files" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <Button Classes="Standard"
-                    Content="Next"
+            <Button Name="SelectFiles"
+                    Grid.Row="2"
+                    Margin="15,0"
+                    Classes="Standard"
+                    Content="Go!"
                     Width="120"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Left"
                     FontSize="14"
                     FontFamily="{StaticResource OpenSans}"
-                    Command="{Binding $parent[Window].DataContext.Transcribe}" />
-        </StackPanel>
-    </ScrollViewer>
+                    Command="{Binding $parent[Window].DataContext.Transcribe}"/>
+        </Grid>
+    </Border>
 </UserControl>

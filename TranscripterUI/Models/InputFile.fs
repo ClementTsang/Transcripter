@@ -1,8 +1,7 @@
 namespace TranscripterUI.Models
 
-type FileConfig(inputFile: string) =
+type InputFile(inputFile: string) =
     member val InputFile = inputFile with get, set
-    member val OutputFile = "" with get, set
 
     member val IsValid =
         TranscripterLib
