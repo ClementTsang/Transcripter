@@ -2,7 +2,98 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:TranscripterUI.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="TranscripterUI.Views.ProcessingView">
-    Welcome to Avalonia!
+    
+    <Design.DataContext>
+        <viewModels:ProcessingViewModel />
+    </Design.DataContext>
+
+    <Border Padding="35, 20">
+        <Grid RowDefinitions="Auto,*,80">
+            <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        Margin="15, 15">
+                <StackPanel Spacing="4">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Progress" />
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Foreground="#99AAB5"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Current transcription progress. Set tight!" />
+                </StackPanel>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Margin="15,16,0,0" RowDefinitions="Auto,10,*">
+                <Grid ColumnDefinitions="*,10,*,10,*,20" Grid.Row="0">
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Grid.Column="0"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="File Name" />
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               FontSize="14"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Output File" />
+                    <TextBlock HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Grid.Column="4"
+                               FontWeight="Bold"
+                               FontSize="14"
+                               Foreground="#fff"
+                               FontFamily="{StaticResource OpenSans}"
+                               Text="Status" />
+                </Grid>
+                <ScrollViewer Grid.Row="2">
+                    <ItemsControl Items="{Binding ProcessingFiles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,10,*,10,*,20">
+                                    <TextBlock HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Grid.Column="0"
+                                               FontSize="14"
+                                               Foreground="#fff"
+                                               TextTrimming="CharacterEllipsis"
+                                               FontFamily="{StaticResource OpenSans}"
+                                               Text="{Binding In}" />
+                                    <TextBlock HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="#fff"
+                                               Grid.Column="2"
+                                               TextTrimming="CharacterEllipsis"
+                                               FontFamily="{StaticResource OpenSans}"
+                                               Text="{Binding Out}" />
+                                    <TextBlock HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="#fff"
+                                               Grid.Column="4"
+                                               TextTrimming="CharacterEllipsis"
+                                               FontFamily="{StaticResource OpenSans}"
+                                               Text="{Binding Status.StringRep}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Border>
+    
 </UserControl>

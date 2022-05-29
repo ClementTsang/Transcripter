@@ -1,5 +1,6 @@
 namespace TranscripterUI.ViewModels
 
+open ReactiveUI
 open System.Collections.ObjectModel
 open TranscripterUI.Models
 open TranscripterUI.ViewModels
@@ -30,17 +31,18 @@ type CurrentStepViewModel() =
     member val CurrentStepIndex = 0 with get, set
 
     member val NumberSteps = steps.Length with get, set
+    member val Enabled = true with get, set
 
-    member this.GetCurrentStep() =
-        this.Steps[this.CurrentStepIndex]
+    member this.GetCurrentStep() = this.Steps[this.CurrentStepIndex]
 
-    member this.NextStep() =
-        this.SetStep(this.CurrentStepIndex + 1)
+    member this.NextStep() = this.SetStep(this.CurrentStepIndex + 1)
 
-    member this.PrevStep() =
-        this.SetStep(this.CurrentStepIndex - 1)
+    member this.PrevStep() = this.SetStep(this.CurrentStepIndex - 1)
 
-    member this.SetStepEnabled(enabled: bool) =
+    member this.SetStepsEnabled(enabled: bool) =
+        this.Enabled <- enabled
+        this.RaisePropertyChanged("Enabled")
+        
         let oldSteps: Step [] =
             Array.zeroCreate this.Steps.Count
 

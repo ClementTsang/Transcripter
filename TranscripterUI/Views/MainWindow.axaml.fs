@@ -59,21 +59,17 @@ type MainWindow() as this =
     member private this.ShowSaveFileDialog(interaction: InteractionContext<string, Option<string>>) =
         let dialog = SaveFileDialog()
         let input = interaction.Input
-        
+
         dialog.InitialFileName <- Path.GetFileName input
-        dialog.Directory <- Path.GetDirectoryName (Path.GetFullPath input) // Currently bugged on Linux, see https://github.com/AvaloniaUI/Avalonia/issues/7535
+        dialog.Directory <- Path.GetDirectoryName(Path.GetFullPath input) // Currently bugged on Linux, see https://github.com/AvaloniaUI/Avalonia/issues/7535
         dialog.Title <- "Set transcript file save location"
         dialog.DefaultExtension <- Path.GetExtension input
-        
+
         task {
             interaction.SetOutput(
                 dialog.ShowAsync(this)
                 |> Async.AwaitTask
                 |> Async.RunSynchronously
-                |> fun out ->
-                    if isNull out then
-                        None
-                    else
-                        Some(out)
+                |> fun out -> if isNull out then None else Some(out)
             )
         }

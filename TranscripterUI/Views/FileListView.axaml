@@ -12,7 +12,8 @@
 
     <Border Padding="35, 80, 35, 0">
         <Grid RowDefinitions="Auto,*,80">
-            <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
+            <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        Margin="15, 15">
                 <StackPanel Spacing="4">
                     <TextBlock HorizontalAlignment="Left"
                                VerticalAlignment="Center"
@@ -29,7 +30,7 @@
                                Text="Review your selected files and where to save transcripts." />
                 </StackPanel>
             </StackPanel>
-            
+
             <Grid Grid.Row="1" Margin="15,16,0,0" RowDefinitions="Auto,10,*">
                 <Grid ColumnDefinitions="*,10,*,20" Grid.Row="0">
                     <TextBlock HorizontalAlignment="Left"
@@ -77,7 +78,8 @@
                                                 HorizontalContentAlignment="Center"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.SetOutputFile}"
                                                 CommandParameter="{Binding Index}">
-                                            <DrawingPresenter Margin="0,1.5,0,0" Width="16" Height="16" Drawing="{DynamicResource BoxIcons.SolidPencil}" />
+                                            <DrawingPresenter Margin="0,1.5,0,0" Width="16" Height="16"
+                                                              Drawing="{DynamicResource BoxIcons.SolidPencil}" />
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -97,7 +99,7 @@
                     HorizontalAlignment="Left"
                     FontSize="14"
                     FontFamily="{StaticResource OpenSans}"
-                    Command="{Binding $parent[Window].DataContext.Transcribe}"/>
+                    Command="{Binding $parent[Window].DataContext.Transcribe}" />
         </Grid>
     </Border>
 </UserControl>

@@ -5,14 +5,15 @@
              xmlns:viewModels="clr-namespace:TranscripterUI.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="TranscripterUI.Views.InvalidFilesView">
-    
+
     <Design.DataContext>
         <viewModels:InvalidFilesViewModel />
     </Design.DataContext>
-    
+
     <Border Padding="35, 80, 35, 0">
         <Grid RowDefinitions="Auto,*,80">
-            <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="15, 15">
+            <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        Margin="15, 15">
                 <StackPanel Spacing="2">
                     <TextBlock HorizontalAlignment="Left"
                                VerticalAlignment="Center"
@@ -29,7 +30,7 @@
                                Text="Some problems were found with the following selected files." />
                 </StackPanel>
             </StackPanel>
-            
+
             <Grid Grid.Row="1" Margin="15,16,15,0" RowDefinitions="Auto,10,*">
                 <Grid ColumnDefinitions="0.7*,10,0.3*" Grid.Row="0">
                     <TextBlock HorizontalAlignment="Left"
@@ -86,7 +87,7 @@
                     HorizontalAlignment="Left"
                     FontSize="14"
                     FontFamily="{StaticResource OpenSans}"
-                    Command="{Binding $parent[Window].DataContext.ReselectFiles}"/>
+                    Command="{Binding $parent[Window].DataContext.ReselectFiles}" />
         </Grid>
     </Border>
 </UserControl>

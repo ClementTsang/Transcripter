@@ -19,7 +19,7 @@
     <Panel Background="#2c2f33">
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0,20,0,0">
             <Panel>
-                <Panel HorizontalAlignment="Center">
+                <Panel IsVisible="{Binding CurrentStepTracking.Enabled}" HorizontalAlignment="Center">
                     <ContentControl Content="{Binding CurrentStepTracking}" />
                 </Panel>
                 <ContentControl Content="{Binding CurrentVM}" />

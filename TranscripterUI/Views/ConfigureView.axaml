@@ -111,7 +111,7 @@
                                                Watermark="10000" />
                             </Panel>
                         </StackPanel>
-                        
+
                         <StackPanel Spacing="2">
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"

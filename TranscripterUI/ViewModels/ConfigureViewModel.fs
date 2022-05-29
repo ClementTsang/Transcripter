@@ -8,12 +8,7 @@ open TranscripterUI.ViewModels
 type FileType =
     | SRT
     | VTT
-    
-    member this.ToString =
-        match this with
-        | SRT -> "SRT"
-        | VTT -> "VTT"
-        
+
     member this.FileFormat =
         match this with
         | SRT -> "srt"
@@ -37,8 +32,11 @@ type ConfigureViewModel() =
     member val MaxCPUs = Environment.ProcessorCount
 
     static member val SupportedTypes = [ FileType.SRT; FileType.VTT ]
+
     static member SupportedTypeStrings =
-        ConfigureViewModel.SupportedTypes |> Seq.map(fun f -> f.ToString) |> Seq.toList
+        ConfigureViewModel.SupportedTypes
+        |> Seq.map (fun f -> f.ToString())
+        |> Seq.toList
 
     member val OutputSelectedIndex = 0 with get, set
 
@@ -46,5 +44,5 @@ type ConfigureViewModel() =
     member val OverwriteSelectedIndex = 1 with get, set
 
     member val MaxWordLength = 10 with get, set
-    
+
     member val MaxLineLength = 10000 with get, set
