@@ -64,7 +64,7 @@ type ProcessingViewModel() =
     member val Config = ProcessingConfig() with get, set
     member val Finished = false with get, set
     member val TotalTimeTaken = "" with get, set
-    
+
     member this.SetFiles(fileListConfig: List<FileListEntry>) =
         this.ProcessingFiles.Clear()
 
@@ -91,9 +91,11 @@ type ProcessingViewModel() =
 
         // We pre-allocate the clients and dump it into a list. Note that accesses to this should _probably_ be
         // protected by a mutex.
-        let numClients = min this.Config.NumCPUs this.ProcessingFiles.Count
+        let numClients =
+            min this.Config.NumCPUs this.ProcessingFiles.Count
+
         let clients =
-            [ for _ in 1 .. numClients -> Transcripter.NewClient(true, None, None) ]
+            [ for _ in 1..numClients -> Transcripter.NewClient(true, None, None) ]
             |> Seq.choose (fun client ->
                 match client with
                 | Ok client ->
@@ -103,6 +105,7 @@ type ProcessingViewModel() =
                     ProcessingViewModel.Log.Debug($"err creating client: {err}")
                     None)
             |> ResizeArray
+
         let mutex = new Mutex()
 
         if clients.Count > 0 then
@@ -113,18 +116,23 @@ type ProcessingViewModel() =
                 let client = clients[0]
                 clients.RemoveAt(0)
                 mutex.ReleaseMutex()
-                
+
                 let perFileWatch =
                     System.Diagnostics.Stopwatch.StartNew()
 
                 file.Status <- ProcessFileState.Working
                 ProcessingViewModel.Log.Debug($"transcribing {file.In}")
 
-                let transcription = Transcripter.Transcribe(client, file.In)
+                let transcription =
+                    Transcripter.Transcribe(client, file.In)
+
                 perFileWatch.Stop()
-                let time = (float perFileWatch.ElapsedMilliseconds) / 1000.0
+
+                let time =
+                    (float perFileWatch.ElapsedMilliseconds) / 1000.0
+
                 ProcessingViewModel.Log.Debug $"Transcription task took %1.2f{time}s"
-                
+
                 match transcription with
                 | Ok result ->
                     ProcessingViewModel.Log.Debug $"{file.In} task - ok"
@@ -135,8 +143,7 @@ type ProcessingViewModel() =
 
                 mutex.WaitOne() |> ignore
                 clients.Add(client)
-                mutex.ReleaseMutex()
-            )
+                mutex.ReleaseMutex())
             |> PSeq.toArray
             |> ignore
         else
@@ -145,7 +152,11 @@ type ProcessingViewModel() =
 
         totalFileWatch.Stop()
         this.Finished <- true
-        this.TotalTimeTaken <- $"Transcription completed in %1.2f{(float totalFileWatch.ElapsedMilliseconds) / 1000.0}s"
+
+        this.TotalTimeTaken <-
+            $"Transcription completed in %1.2f{(float totalFileWatch.ElapsedMilliseconds)
+                                               / 1000.0}s"
+
         this.RaisePropertyChanged("Finished")
         this.RaisePropertyChanged("TotalTimeTaken")
         ProcessingViewModel.Log.Debug this.TotalTimeTaken

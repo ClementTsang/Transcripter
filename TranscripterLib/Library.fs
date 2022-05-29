@@ -51,7 +51,8 @@ module Transcripter =
             let wavPath =
                 let tmp = FileSystem.GetTempFileName()
 
-                let newName = Path.ChangeExtension(tmp, "wav")
+                let newName =
+                    Path.ChangeExtension(tmp, "wav")
 
                 if File.Exists(tmp) && not (File.Exists(newName)) then
                     FileSystem.MoveFile(tmp, newName)
@@ -80,9 +81,11 @@ module Transcripter =
 
                 let buffer = WaveBuffer inputBytes
 
-                let bufferSize = Convert.ToUInt32(buffer.MaxSize / 2)
+                let bufferSize =
+                    Convert.ToUInt32(buffer.MaxSize / 2)
 
-                let result = client.SpeechToTextWithMetadata(buffer.ShortBuffer, bufferSize, 1u)
+                let result =
+                    client.SpeechToTextWithMetadata(buffer.ShortBuffer, bufferSize, 1u)
 
                 buffer.Clear()
 

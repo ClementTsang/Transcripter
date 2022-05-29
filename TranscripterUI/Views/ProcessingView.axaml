@@ -93,13 +93,12 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
-            
+
             <StackPanel Margin="15,0" Grid.Row="2" Spacing="10" IsVisible="{Binding Finished}">
                 <TextBlock HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            FontSize="14"
-                           Foreground="#fff"
-                           TextTrimming="CharacterEllipsis"
+                           Foreground="#99AAB5"
                            FontFamily="{StaticResource OpenSans}"
                            Text="{Binding TotalTimeTaken}" />
                 <Button Name="SelectFiles"
@@ -109,8 +108,7 @@
                         HorizontalAlignment="Left"
                         FontSize="14"
                         FontFamily="{StaticResource OpenSans}"
-                        Command="{Binding $parent[Window].DataContext.StartAgain}"
-                />
+                        Command="{Binding $parent[Window].DataContext.StartAgain}" />
             </StackPanel>
         </Grid>
     </Border>
