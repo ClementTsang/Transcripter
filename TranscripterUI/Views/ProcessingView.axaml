@@ -5,13 +5,13 @@
              xmlns:viewModels="clr-namespace:TranscripterUI.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="TranscripterUI.Views.ProcessingView">
-    
+
     <Design.DataContext>
         <viewModels:ProcessingViewModel />
     </Design.DataContext>
 
-    <Border Padding="35, 20">
-        <Grid RowDefinitions="Auto,*,80">
+    <Border Padding="35, 20,35,0">
+        <Grid RowDefinitions="Auto,*,85">
             <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                         Margin="15, 15">
                 <StackPanel Spacing="4">
@@ -32,7 +32,7 @@
             </StackPanel>
 
             <Grid Grid.Row="1" Margin="15,16,0,0" RowDefinitions="Auto,10,*">
-                <Grid ColumnDefinitions="*,10,*,10,*,20" Grid.Row="0">
+                <Grid ColumnDefinitions="2*,10,2*,10,1*,20" Grid.Row="0">
                     <TextBlock HorizontalAlignment="Left"
                                VerticalAlignment="Center"
                                Grid.Column="0"
@@ -62,7 +62,7 @@
                     <ItemsControl Items="{Binding ProcessingFiles}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid ColumnDefinitions="*,10,*,10,*,20">
+                                <Grid ColumnDefinitions="2*,10,2*,10,1*,20">
                                     <TextBlock HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
                                                Grid.Column="0"
@@ -93,7 +93,26 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
+            
+            <StackPanel Margin="15,0" Grid.Row="2" Spacing="10" IsVisible="{Binding Finished}">
+                <TextBlock HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           Foreground="#fff"
+                           TextTrimming="CharacterEllipsis"
+                           FontFamily="{StaticResource OpenSans}"
+                           Text="{Binding TotalTimeTaken}" />
+                <Button Name="SelectFiles"
+                        Classes="Standard"
+                        Content="Transcribe other files"
+                        Width="170"
+                        HorizontalAlignment="Left"
+                        FontSize="14"
+                        FontFamily="{StaticResource OpenSans}"
+                        Command="{Binding $parent[Window].DataContext.StartAgain}"
+                />
+            </StackPanel>
         </Grid>
     </Border>
-    
+
 </UserControl>

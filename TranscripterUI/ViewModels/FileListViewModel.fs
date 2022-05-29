@@ -28,7 +28,7 @@ type FileListViewModel() =
                     .Handle(fileEntry.Out)
                     .Subscribe(fun file ->
                         match file with
-                        | Some (file) ->
+                        | Some file ->
                             fileEntry.Out <- file
                             this.FileListConfiguration.RemoveAt(index)
                             this.FileListConfiguration.Insert(index, fileEntry)

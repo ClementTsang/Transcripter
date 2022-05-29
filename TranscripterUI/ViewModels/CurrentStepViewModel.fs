@@ -42,7 +42,7 @@ type CurrentStepViewModel() =
     member this.SetStepsEnabled(enabled: bool) =
         this.Enabled <- enabled
         this.RaisePropertyChanged("Enabled")
-        
+
         let oldSteps: Step [] =
             Array.zeroCreate this.Steps.Count
 

@@ -87,7 +87,6 @@ type MainWindowViewModel() =
 
     member private this.NextStep() =
         this.CurrentStepTracking.NextStep()
-
         this.CurrentVM <-
             this
                 .CurrentStepTracking
@@ -118,16 +117,27 @@ type MainWindowViewModel() =
         fun () ->
             Task.Factory.StartNew (fun () ->
                 this.CurrentStepTracking.SetStepsEnabled(false)
-                
                 let pvm = ProcessingViewModel()
+
                 pvm.SetFiles(
                     this.FileListVM.FileListConfiguration
                     |> Seq.toList
                 )
-                this.CurrentVM <- pvm
-                pvm.ProcessFiles()
 
-                this.CurrentStepTracking.SetStepsEnabled(true))
+                pvm.SetConfig(this.ConfigureVM)
+                this.CurrentVM <- pvm
+
+                pvm.ProcessFiles()
+            )
 
     member this.Transcribe =
         ReactiveCommand.CreateFromTask(this.TranscribeTask)
+
+    member this.StartAgain() =
+        this.CurrentStepTracking.SetStepsEnabled(true)
+        this.CurrentStepTracking.SetStep(0)
+        this.CurrentVM <-
+            this
+                .CurrentStepTracking
+                .GetCurrentStep()
+                .StepViewModel

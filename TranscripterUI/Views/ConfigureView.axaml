@@ -170,7 +170,7 @@
                                        FontSize="14"
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="EXPERIMENTAL - The maximum number of transcription tasks that can run at the same time. Note that Transcripter may crash if this is not set to 1, so its best to not touch this for now." />
+                                       Text="EXPERIMENTAL - The maximum number of transcription tasks that can run at the same time. Note that Transcripter may potentially crash if this more than 1, and it will increase memory and CPU usage." />
                             <Slider Cursor="Hand"
                                     HorizontalAlignment="Stretch"
                                     Foreground="#268bd2"
