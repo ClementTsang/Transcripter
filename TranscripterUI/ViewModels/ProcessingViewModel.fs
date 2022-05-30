@@ -81,8 +81,13 @@ type ProcessingViewModel() =
             | Failed _ -> acc + 1)
 
     member this.ProcessFiles() =
-        // We pre-allocate the clients and dump it into a list, alongside an index list. Note that accesses to this
-        // index list should _probably_ be protected by a mutex, since it's parallel...
+        // Note that STT clients cannot be "shared" across a concurrent "job" - each job needs its own dedicated
+        // client, otherwise you are guaranteed to get a nasty crash when running jobs in parallel.
+        //
+        // Therefore, we pre-allocate multiple clients and dump them it into a list, alongside an index list. The index
+        // list controls which client is accessed, and we control this across our parallel thread accesses.
+        // 
+        // Note that accesses to this index list should _probably_ be protected by a mutex, since it's parallel...
         let mutex = new Mutex()
         
         let numClients =

@@ -16,6 +16,17 @@ type FileType =
         | SRT -> "srt"
         | VTT -> "vtt"
 
+type LineControlType =
+    | WordLength
+    | CharLength
+    | WordAndCharLength
+    
+    member this.Display =
+        match this with
+        | WordLength -> "Number of words"
+        | CharLength -> "Number of characters"
+        | WordAndCharLength -> "Both words and characters"
+
 [<DataContract>]
 type ConfigureViewModel() =
     inherit ViewModelBase()
@@ -27,6 +38,7 @@ type ConfigureViewModel() =
     let defaultScorePathString = "Using built-in scorer: English v1.0.0 (Huge Vocab)"
 
     let mutable numCPUs = 1
+    let mutable lineSplittingIndex = 0
 
     member this.NumCPUs
         with get (): int = numCPUs
@@ -60,6 +72,31 @@ type ConfigureViewModel() =
     member val ScorerPath: Option<string> = None with get, set
     member val ModelPathString = defaultModelPathString with get, set
     member val ScorerPathString = defaultScorePathString with get, set
+    
+    static member val LineSplittingOptions = [ LineControlType.WordLength; LineControlType.CharLength; LineControlType.WordAndCharLength ]
+    member val LineLengthDisplay = (true, 1.0) with get, set
+    member val WordLengthDisplay = (false, 0.5) with get, set
+    
+    member this.LineSplittingIndex
+        with get() = lineSplittingIndex
+        and set newVal =
+            if not(newVal = lineSplittingIndex) then
+                lineSplittingIndex <- newVal
+                
+                match ConfigureViewModel.LineSplittingOptions[lineSplittingIndex] with
+                | LineControlType.WordLength ->
+                    this.LineLengthDisplay <- (true, 1.0)
+                    this.WordLengthDisplay <- (false, 0.5)
+                | LineControlType.CharLength ->
+                    this.LineLengthDisplay <- (false, 0.5)
+                    this.WordLengthDisplay <- (true, 1.0)
+                | LineControlType.WordAndCharLength ->
+                    this.LineLengthDisplay <- (true, 1.0)
+                    this.WordLengthDisplay <- (true, 1.0)
+                
+                this.RaisePropertyChanged("LineSplittingIndex")
+                this.RaisePropertyChanged("LineLengthDisplay")
+                this.RaisePropertyChanged("WordLengthDisplay")
         
 
     member private this.OpenFileDialog(dialog: OpenFileDialog, callback: List<string> -> unit) =
