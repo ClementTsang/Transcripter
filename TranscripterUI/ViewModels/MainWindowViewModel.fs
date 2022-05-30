@@ -48,7 +48,7 @@ type MainWindowViewModel() =
                 dialog.AllowMultiple <- true
                 dialog.Filters.Add(allFilter)
                 dialog.Title <- "Select files to transcribe"
-                
+
                 this
                     .ShowOpenFileDialog
                     .Handle(dialog)

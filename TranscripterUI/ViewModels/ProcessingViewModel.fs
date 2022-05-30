@@ -86,12 +86,13 @@ type ProcessingViewModel() =
         //
         // Therefore, we pre-allocate multiple clients and dump them it into a list, alongside an index list. The index
         // list controls which client is accessed, and we control this across our parallel thread accesses.
-        // 
+        //
         // Note that accesses to this index list should _probably_ be protected by a mutex, since it's parallel...
         let mutex = new Mutex()
-        
+
         let numClients =
             min this.Config.NumCPUs this.ProcessingFiles.Count
+
         let clients =
             [ for _ in 1..numClients -> Transcripter.NewClient(true, this.Config.ModelPath, this.Config.ScorerPath) ]
             |> Seq.choose (fun client ->
@@ -103,14 +104,17 @@ type ProcessingViewModel() =
                     ProcessingViewModel.Log.Debug($"err creating client: {err}")
                     None)
             |> Seq.toList
-        let clientIndices = [ for i in 0..numClients - 1 -> i ] |> ResizeArray
-        
+
+        let clientIndices =
+            [ for i in 0 .. numClients - 1 -> i ]
+            |> ResizeArray
+
         assert (clientIndices.Count = clients.Length)
-        
+
         let totalFileWatch =
             System.Diagnostics.Stopwatch.StartNew()
 
-        if not(clients.IsEmpty) then
+        if not (clients.IsEmpty) then
             this.ProcessingFiles
             |> PSeq.withDegreeOfParallelism clients.Length
             |> PSeq.map (fun file ->
@@ -118,14 +122,18 @@ type ProcessingViewModel() =
                 let clientIndex = clientIndices[0]
                 clientIndices.RemoveAt(0)
                 mutex.ReleaseMutex()
-                
+
                 let client = clients[clientIndex]
 
                 file.Status <- ProcessFileState.Working
                 ProcessingViewModel.Log.Debug($"transcribing {file.In}")
 
-                let perFileWatch = System.Diagnostics.Stopwatch.StartNew()
-                let transcription = client.Transcribe(file.In, this.Config.NumCandidates)
+                let perFileWatch =
+                    System.Diagnostics.Stopwatch.StartNew()
+
+                let transcription =
+                    client.Transcribe(file.In, this.Config.NumCandidates)
+
                 perFileWatch.Stop()
 
                 let time =

@@ -20,7 +20,7 @@ type LineControlType =
     | WordLength
     | CharLength
     | WordAndCharLength
-    
+
     member this.Display =
         match this with
         | WordLength -> "Number of words"
@@ -30,12 +30,14 @@ type LineControlType =
 [<DataContract>]
 type ConfigureViewModel() =
     inherit ViewModelBase()
-    
+
     [<Literal>]
-    let defaultModelPathString = "Using built-in model: English v1.0.0 (Huge Vocab)"
-    
+    let defaultModelPathString =
+        "Using built-in model: English v1.0.0 (Huge Vocab)"
+
     [<Literal>]
-    let defaultScorePathString = "Using built-in scorer: English v1.0.0 (Huge Vocab)"
+    let defaultScorePathString =
+        "Using built-in scorer: English v1.0.0 (Huge Vocab)"
 
     let mutable numCPUs = 1
     let mutable lineSplittingIndex = 0
@@ -72,17 +74,21 @@ type ConfigureViewModel() =
     member val ScorerPath: Option<string> = None with get, set
     member val ModelPathString = defaultModelPathString with get, set
     member val ScorerPathString = defaultScorePathString with get, set
-    
-    static member val LineSplittingOptions = [ LineControlType.WordLength; LineControlType.CharLength; LineControlType.WordAndCharLength ]
+
+    static member val LineSplittingOptions =
+        [ LineControlType.WordLength
+          LineControlType.CharLength
+          LineControlType.WordAndCharLength ]
+
     member val LineLengthDisplay = (true, 1.0) with get, set
     member val WordLengthDisplay = (false, 0.5) with get, set
-    
+
     member this.LineSplittingIndex
-        with get() = lineSplittingIndex
+        with get () = lineSplittingIndex
         and set newVal =
-            if not(newVal = lineSplittingIndex) then
+            if not (newVal = lineSplittingIndex) then
                 lineSplittingIndex <- newVal
-                
+
                 match ConfigureViewModel.LineSplittingOptions[lineSplittingIndex] with
                 | LineControlType.WordLength ->
                     this.LineLengthDisplay <- (true, 1.0)
@@ -93,11 +99,11 @@ type ConfigureViewModel() =
                 | LineControlType.WordAndCharLength ->
                     this.LineLengthDisplay <- (true, 1.0)
                     this.WordLengthDisplay <- (true, 1.0)
-                
+
                 this.RaisePropertyChanged("LineSplittingIndex")
                 this.RaisePropertyChanged("LineLengthDisplay")
                 this.RaisePropertyChanged("WordLengthDisplay")
-        
+
 
     member private this.OpenFileDialog(dialog: OpenFileDialog, callback: List<string> -> unit) =
         this
@@ -130,11 +136,12 @@ type ConfigureViewModel() =
                             this.ModelPath <- None
                         else
                             this.ModelPath <- Some(files[0])
-                            
+
                         this.ModelPathString <-
                             match this.ModelPath with
                             | None -> defaultModelPathString
                             | Some p -> $"Selected model: {p}"
+
                         this.RaisePropertyChanged("ModelPathString")
 
                 this.OpenFileDialog(dialog, callback))
@@ -163,11 +170,12 @@ type ConfigureViewModel() =
                             this.ScorerPath <- None
                         else
                             this.ScorerPath <- Some(files[0])
-                            
+
                         this.ScorerPathString <-
                             match this.ScorerPath with
                             | None -> defaultScorePathString
                             | Some p -> $"Selected scorer: {p}"
+
                         this.RaisePropertyChanged("ScorerPathString")
 
                 this.OpenFileDialog(dialog, callback))
