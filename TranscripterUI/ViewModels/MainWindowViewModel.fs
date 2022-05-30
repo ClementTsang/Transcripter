@@ -3,6 +3,7 @@
 open System.IO
 open System.Runtime.Serialization
 open System.Threading.Tasks
+open Avalonia.Controls
 open FSharp.Collections.ParallelSeq
 open ReactiveUI
 open TranscripterUI.Models
@@ -32,15 +33,25 @@ type MainWindowViewModel() =
 
     member val ShowSteps = false with get, set
     member val CurrentStepTracking = currentStepVM with get, set
-    member val ShowOpenFileDialog = Interaction<Unit, List<string>>()
+    member val ShowOpenFileDialog = Interaction<OpenFileDialog, List<string>>()
     member val CurrentlySelectedFiles = List.Empty with get, set
 
     member private this.SelectFilesAsync =
         fun () ->
             Task.Factory.StartNew (fun () ->
+                let dialog = OpenFileDialog()
+
+                let allFilter = FileDialogFilter()
+                allFilter.Name <- "All Files"
+                allFilter.Extensions.Add("*")
+
+                dialog.AllowMultiple <- true
+                dialog.Filters.Add(allFilter)
+                dialog.Title <- "Select files to transcribe"
+                
                 this
                     .ShowOpenFileDialog
-                    .Handle(())
+                    .Handle(dialog)
                     .Subscribe(fun files ->
                         MainWindowViewModel.Log.Debug($"selected files: {files}")
 

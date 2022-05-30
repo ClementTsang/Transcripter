@@ -105,8 +105,7 @@
                                        Text="The maximum number of words in a single subtitle line before splitting into a separate line. Defaults to 10." />
 
                             <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
-                                <NumericUpDown Cursor="Ibeam"
-                                               Minimum="1"
+                                <NumericUpDown Minimum="1"
                                                Value="{Binding MaxWordLength, Mode=TwoWay}"
                                                Watermark="10000" />
                             </Panel>
@@ -129,8 +128,7 @@
                                        Text="The maximum length of a line in terms of characters before splitting into a separate line. Defaults to 10000." />
 
                             <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
-                                <NumericUpDown Cursor="Ibeam"
-                                               Minimum="1"
+                                <NumericUpDown Minimum="1"
                                                Value="{Binding MaxLineLength, Mode=TwoWay}"
                                                Watermark="10000" />
                             </Panel>
@@ -153,7 +151,7 @@
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
                                        TextWrapping="Wrap"
-                                       Text="Advanced settings - only touch if you know what you are doing." />
+                                       Text="Advanced settings - no need to touch this for the most part." />
                         </StackPanel>
 
                         <StackPanel Spacing="2">
@@ -170,7 +168,7 @@
                                        FontSize="14"
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="EXPERIMENTAL - The maximum number of transcription tasks that can run at the same time. Note that Transcripter may potentially crash if this more than 1, and it will increase memory and CPU usage." />
+                                       Text="The maximum number of transcription tasks that can run at the same time. Note that Transcripter may potentially crash if this more than 1, and it will increase memory and CPU usage." />
                             <Slider Cursor="Hand"
                                     HorizontalAlignment="Stretch"
                                     Foreground="#268bd2"
@@ -212,6 +210,93 @@
                                            Text="{Binding MaxCPUs}" />
                             </StackPanel>
                         </StackPanel>
+                        
+                        <StackPanel Spacing="2">
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Candidates" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       FontSize="14"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="The total number of candidate transcripts to return - the highest confidence one will be picked. Note that increasing this may increase the time taken. Defaults to 1." />
+                            <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
+                                <NumericUpDown Minimum="1"
+                                               Value="{Binding NumCandidates, Mode=TwoWay}"
+                                               Watermark="1" />
+                            </Panel>
+                        </StackPanel>
+                        
+                        <StackPanel Spacing="2">
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Custom Model Path" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       FontSize="14"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="A path to a custom STT model." />
+                            <Button Classes="Standard"
+                                    Margin="0,4"
+                                    Content="Select Model"
+                                    Width="120"
+                                    FontSize="14"
+                                    FontFamily="{StaticResource OpenSans}"
+                                    Command="{Binding SelectModel}" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,-2"
+                                       TextWrapping="Wrap"
+                                       FontSize="12"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="{Binding ModelPathString}" />
+                        </StackPanel>
+                        
+                        <StackPanel Spacing="2">
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#fff"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="Custom Scorer Path" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       FontSize="14"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="A path to a custom STT scorer." />
+                            <Button Classes="Standard"
+                                    Margin="0,4"
+                                    Content="Select Scorer"
+                                    Width="120"
+                                    FontSize="14"
+                                    FontFamily="{StaticResource OpenSans}"
+                                    Command="{Binding SelectScorer}" />
+                            <TextBlock HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,-2"
+                                       TextWrapping="Wrap"
+                                       FontSize="12"
+                                       Foreground="#99AAB5"
+                                       FontFamily="{StaticResource OpenSans}"
+                                       Text="{Binding ScorerPathString}" />
+                        </StackPanel>
+                        
                     </StackPanel>
 
                 </StackPanel>

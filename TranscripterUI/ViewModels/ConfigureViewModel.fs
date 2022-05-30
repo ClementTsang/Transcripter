@@ -1,5 +1,7 @@
 namespace TranscripterUI.ViewModels
 
+open System.Threading.Tasks
+open Avalonia.Controls
 open ReactiveUI
 open System
 open System.Runtime.Serialization
@@ -17,6 +19,12 @@ type FileType =
 [<DataContract>]
 type ConfigureViewModel() =
     inherit ViewModelBase()
+    
+    [<Literal>]
+    let defaultModelPathString = "Using built-in model: English v1.0.0 (Huge Vocab)"
+    
+    [<Literal>]
+    let defaultScorePathString = "Using built-in scorer: English v1.0.0 (Huge Vocab)"
 
     let mutable numCPUs = 1
 
@@ -44,5 +52,91 @@ type ConfigureViewModel() =
     member val OverwriteSelectedIndex = 1 with get, set
 
     member val MaxWordLength = 10 with get, set
-
     member val MaxLineLength = 10000 with get, set
+    member val NumCandidates = 1u with get, set
+
+    member val ShowOpenFileDialog = Interaction<OpenFileDialog, List<string>>()
+    member val ModelPath: Option<string> = None with get, set
+    member val ScorerPath: Option<string> = None with get, set
+    member val ModelPathString = defaultModelPathString with get, set
+    member val ScorerPathString = defaultScorePathString with get, set
+        
+
+    member private this.OpenFileDialog(dialog: OpenFileDialog, callback: List<string> -> unit) =
+        this
+            .ShowOpenFileDialog
+            .Handle(dialog)
+            .Subscribe(callback)
+        |> ignore
+
+    member private this.SelectModelAsync =
+        fun () ->
+            Task.Factory.StartNew (fun () ->
+                let dialog = OpenFileDialog()
+
+                let allFilter = FileDialogFilter()
+                allFilter.Name <- "All Files"
+                allFilter.Extensions.Add("*")
+
+                let tfliteFilter = FileDialogFilter()
+                tfliteFilter.Name <- "TensorFlow Lite Model"
+                tfliteFilter.Extensions.Add("tflite")
+
+                dialog.AllowMultiple <- false
+                dialog.Filters.Add(tfliteFilter)
+                dialog.Filters.Add(allFilter)
+                dialog.Title <- "Select files to transcribe"
+
+                let callback =
+                    fun (files: List<string>) ->
+                        if files.IsEmpty then
+                            this.ModelPath <- None
+                        else
+                            this.ModelPath <- Some(files[0])
+                            
+                        this.ModelPathString <-
+                            match this.ModelPath with
+                            | None -> defaultModelPathString
+                            | Some p -> $"Selected model: {p}"
+                        this.RaisePropertyChanged("ModelPathString")
+
+                this.OpenFileDialog(dialog, callback))
+
+    member private this.SelectScorerAsync =
+        fun () ->
+            Task.Factory.StartNew (fun () ->
+                let dialog = OpenFileDialog()
+
+                let allFilter = FileDialogFilter()
+                allFilter.Name <- "All Files"
+                allFilter.Extensions.Add("*")
+
+                let scorerFilter = FileDialogFilter()
+                scorerFilter.Name <- "Scorer"
+                scorerFilter.Extensions.Add("scorer")
+
+                dialog.AllowMultiple <- false
+                dialog.Filters.Add(scorerFilter)
+                dialog.Filters.Add(allFilter)
+                dialog.Title <- "Select files to transcribe"
+
+                let callback =
+                    fun (files: List<string>) ->
+                        if files.IsEmpty then
+                            this.ScorerPath <- None
+                        else
+                            this.ScorerPath <- Some(files[0])
+                            
+                        this.ScorerPathString <-
+                            match this.ScorerPath with
+                            | None -> defaultScorePathString
+                            | Some p -> $"Selected scorer: {p}"
+                        this.RaisePropertyChanged("ScorerPathString")
+
+                this.OpenFileDialog(dialog, callback))
+
+    member this.SelectModel =
+        ReactiveCommand.CreateFromTask(this.SelectModelAsync)
+
+    member this.SelectScorer =
+        ReactiveCommand.CreateFromTask(this.SelectScorerAsync)

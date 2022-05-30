@@ -24,6 +24,7 @@ type MainWindow() as this =
     member private this.BindSelectFileDialog() =
         this.WhenActivated (fun (disposable: CompositeDisposable) ->
             disposable.Add(this.ViewModel.ShowOpenFileDialog.RegisterHandler(this.ShowOpenFileDialog))
+            disposable.Add(this.ViewModel.ConfigureVM.ShowOpenFileDialog.RegisterHandler(this.ShowOpenFileDialog))
             disposable.Add(this.ViewModel.FileListVM.ShowSaveFileDialog.RegisterHandler(this.ShowSaveFileDialog)))
         |> ignore
 
@@ -32,16 +33,8 @@ type MainWindow() as this =
     ///
     ///     Approach based on the <a href="https://github.com/grokys/FileDialogMvvm">following example</a>.
     /// </summary>
-    member private this.ShowOpenFileDialog(interaction: InteractionContext<Unit, List<string>>) =
-        let dialog = OpenFileDialog()
-
-        let allFilter = FileDialogFilter()
-        allFilter.Name <- "All Files"
-        allFilter.Extensions.Add("*")
-
-        dialog.AllowMultiple <- true
-        dialog.Filters.Add(allFilter)
-        dialog.Title <- "Select files to transcribe"
+    member private this.ShowOpenFileDialog(interaction: InteractionContext<OpenFileDialog, List<string>>) =
+        let dialog = interaction.Input
 
         task {
             interaction.SetOutput(

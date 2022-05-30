@@ -21,21 +21,13 @@ type ProcessFileState =
         | Done s -> $"Done {s}"
         | Failed s -> $"Failed: {s}"
 
-type ProcessingConfig(?numCPUs: int, ?maxWordLength: int, ?maxLineLength: int) =
-    member val NumCPUs =
-        match numCPUs with
-        | Some numCPUs -> numCPUs
-        | None -> 0 with get, set
-
-    member val MaxWordLength =
-        match maxWordLength with
-        | Some maxWordLength -> maxWordLength
-        | None -> 0 with get, set
-
-    member val MaxLineLength =
-        match maxLineLength with
-        | Some maxLineLength -> maxLineLength
-        | None -> 0 with get, set
+type ProcessingConfig() =
+    member val NumCPUs = 1 with get, set
+    member val MaxWordLength = 5 with get, set
+    member val MaxLineLength = 10000 with get, set
+    member val NumCandidates = 1u with get, set
+    member val ModelPath = None with get, set
+    member val ScorerPath = None with get, set
 
 type ProcessFile(inputFile: string, outputFile: string) =
     let mutable status = NotStarted
@@ -72,9 +64,12 @@ type ProcessingViewModel() =
         |> Seq.iter (fun f -> this.ProcessingFiles.Add(ProcessFile(f.In, f.Out)))
 
     member this.SetConfig(configureVM: ConfigureViewModel) =
+        this.Config.NumCPUs <- configureVM.NumCPUs
         this.Config.MaxLineLength <- configureVM.MaxLineLength
         this.Config.MaxWordLength <- configureVM.MaxWordLength
-        this.Config.NumCPUs <- configureVM.NumCPUs
+        this.Config.NumCandidates <- configureVM.NumCandidates
+        this.Config.ModelPath <- configureVM.ModelPath
+        this.Config.ScorerPath <- configureVM.ScorerPath
 
     member this.NumFilesDone() =
         (0, this.ProcessingFiles)
@@ -95,7 +90,7 @@ type ProcessingViewModel() =
             min this.Config.NumCPUs this.ProcessingFiles.Count
 
         let clients =
-            [ for _ in 1..numClients -> Transcripter.NewClient(true, None, None) ]
+            [ for _ in 1..numClients -> Transcripter.NewClient(true, this.Config.ModelPath, this.Config.ScorerPath) ]
             |> Seq.choose (fun client ->
                 match client with
                 | Ok client ->
@@ -121,7 +116,7 @@ type ProcessingViewModel() =
                 ProcessingViewModel.Log.Debug($"transcribing {file.In}")
 
                 let perFileWatch = System.Diagnostics.Stopwatch.StartNew()
-                let transcription = client.Transcribe(file.In)
+                let transcription = client.Transcribe(file.In, this.Config.NumCandidates)
                 perFileWatch.Stop()
 
                 let time =
