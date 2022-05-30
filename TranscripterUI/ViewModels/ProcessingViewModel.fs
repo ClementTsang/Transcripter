@@ -117,15 +117,11 @@ type ProcessingViewModel() =
                 clients.RemoveAt(0)
                 mutex.ReleaseMutex()
 
-                let perFileWatch =
-                    System.Diagnostics.Stopwatch.StartNew()
-
                 file.Status <- ProcessFileState.Working
                 ProcessingViewModel.Log.Debug($"transcribing {file.In}")
 
-                let transcription =
-                    Transcripter.Transcribe(client, file.In)
-
+                let perFileWatch = System.Diagnostics.Stopwatch.StartNew()
+                let transcription = client.Transcribe(file.In)
                 perFileWatch.Stop()
 
                 let time =

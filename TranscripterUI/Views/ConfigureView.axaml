@@ -44,7 +44,7 @@
                                        FontSize="14"
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="The type of transcript file to create." />
+                                       Text="The type of transcript file to create. Can be changed on a per-file basis in the next step." />
                             <ComboBox Items="{Binding SupportedTypeStrings}"
                                       Width="80"
                                       Margin="0,4,0,0"
