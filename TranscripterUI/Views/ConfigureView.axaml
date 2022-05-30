@@ -118,7 +118,7 @@
                                 </ComboBox>
                             </StackPanel>
 
-                            <StackPanel Spacing="18">
+                            <StackPanel Spacing="16">
                                 <StackPanel Spacing="2" IsEnabled="{Binding WordLengthDisplay.Item1}"
                                             Opacity="{Binding WordLengthDisplay.Item2}">
                                     <TextBlock HorizontalAlignment="Left"

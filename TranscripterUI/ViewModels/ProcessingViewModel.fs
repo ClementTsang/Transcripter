@@ -21,13 +21,13 @@ type ProcessFileState =
         | Done s -> $"Done {s}"
         | Failed s -> $"Failed: {s}"
 
-type ProcessingConfig() =
-    member val NumCPUs = 1 with get, set
-    member val MaxWordLength = 5 with get, set
-    member val MaxLineLength = 10000 with get, set
-    member val NumCandidates = 1u with get, set
-    member val ModelPath = None with get, set
-    member val ScorerPath = None with get, set
+type ProcessingConfig(config: ConfigureViewModel) =
+    member val NumCPUs = config.NumCPUs with get, set
+    member val MaxWordLength = config.MaxWordLength with get, set
+    member val MaxLineLength = config.MaxLineLength with get, set
+    member val NumCandidates = config.NumCandidates with get, set
+    member val ModelPath = config.ModelPath with get, set
+    member val ScorerPath = config.ScorerPath with get, set
 
 type ProcessFile(inputFile: string, outputFile: string) =
     let mutable status = NotStarted
@@ -46,14 +46,14 @@ type ProcessFile(inputFile: string, outputFile: string) =
         [<CLIEvent>]
         member this.PropertyChanged = event.Publish
 
-type ProcessingViewModel() =
+type ProcessingViewModel(config: ConfigureViewModel) =
     inherit ViewModelBase()
 
     static member Log =
         NLog.LogManager.GetCurrentClassLogger()
 
     member val ProcessingFiles = ObservableCollection([]) with get, set
-    member val Config = ProcessingConfig() with get, set
+    member val Config = ProcessingConfig(config) with get
     member val Finished = false with get, set
     member val TotalTimeTaken = "" with get, set
 
@@ -62,14 +62,6 @@ type ProcessingViewModel() =
 
         fileListConfig
         |> Seq.iter (fun f -> this.ProcessingFiles.Add(ProcessFile(f.In, f.Out)))
-
-    member this.SetConfig(configureVM: ConfigureViewModel) =
-        this.Config.NumCPUs <- configureVM.NumCPUs
-        this.Config.MaxLineLength <- configureVM.MaxLineLength
-        this.Config.MaxWordLength <- configureVM.MaxWordLength
-        this.Config.NumCandidates <- configureVM.NumCandidates
-        this.Config.ModelPath <- configureVM.ModelPath
-        this.Config.ScorerPath <- configureVM.ScorerPath
 
     member this.NumFilesDone() =
         (0, this.ProcessingFiles)
@@ -114,7 +106,7 @@ type ProcessingViewModel() =
         let totalFileWatch =
             System.Diagnostics.Stopwatch.StartNew()
 
-        if not (clients.IsEmpty) then
+        if not clients.IsEmpty then
             this.ProcessingFiles
             |> PSeq.withDegreeOfParallelism clients.Length
             |> PSeq.map (fun file ->

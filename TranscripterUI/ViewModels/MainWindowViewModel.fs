@@ -129,14 +129,13 @@ type MainWindowViewModel() =
         fun () ->
             Task.Factory.StartNew (fun () ->
                 this.CurrentStepTracking.SetStepsEnabled(false)
-                let pvm = ProcessingViewModel()
+                let pvm = ProcessingViewModel(this.ConfigureVM)
 
                 pvm.SetFiles(
                     this.FileListVM.FileListConfiguration
                     |> Seq.toList
                 )
 
-                pvm.SetConfig(this.ConfigureVM)
                 this.CurrentVM <- pvm
 
                 pvm.ProcessFiles())
