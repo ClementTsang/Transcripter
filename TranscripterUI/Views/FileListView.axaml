@@ -89,8 +89,7 @@
                 </ScrollViewer>
             </Grid>
 
-            <Button Name="SelectFiles"
-                    Grid.Row="2"
+            <Button Grid.Row="2"
                     Margin="15,0"
                     Classes="Standard"
                     Content="Go!"

@@ -1,11 +1,13 @@
 ﻿namespace TranscripterUI.ViewModels
 
+open Avalonia.Controls.ApplicationLifetimes
+open ReactiveUI
 open System.IO
 open System.Runtime.Serialization
 open System.Threading.Tasks
+open Avalonia
 open Avalonia.Controls
 open FSharp.Collections.ParallelSeq
-open ReactiveUI
 open TranscripterUI.Models
 open TranscripterUI.ViewModels
 
@@ -129,12 +131,13 @@ type MainWindowViewModel() =
         fun () ->
             Task.Factory.StartNew (fun () ->
                 this.CurrentStepTracking.SetStepsEnabled(false)
-                let pvm = ProcessingViewModel(this.ConfigureVM)
+                let pvm = ProcessingViewModel()
 
                 pvm.SetFiles(
                     this.FileListVM.FileListConfiguration
                     |> Seq.toList
                 )
+                pvm.SetConfig(this.ConfigureVM)
 
                 this.CurrentVM <- pvm
 
@@ -142,6 +145,12 @@ type MainWindowViewModel() =
 
     member this.Transcribe =
         ReactiveCommand.CreateFromTask(this.TranscribeTask)
+        
+    member this.Close() =
+        match Application.Current.ApplicationLifetime with
+        | :? IClassicDesktopStyleApplicationLifetime as window ->
+            window.Shutdown()
+        | _ -> ()
 
     member this.StartAgain() =
         this.CurrentStepTracking.SetStepsEnabled(true)

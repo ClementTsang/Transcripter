@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:TranscripterUI.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="TranscripterUI.Views.InvalidFilesView">
 
     <Design.DataContext>
@@ -78,8 +78,7 @@
                 </ScrollViewer>
             </Grid>
 
-            <Button Name="SelectFiles"
-                    Grid.Row="2"
+            <Button Grid.Row="2"
                     Margin="15,0"
                     Classes="Standard"
                     Content="Reselect Files"

@@ -21,13 +21,13 @@ type ProcessFileState =
         | Done s -> $"Done {s}"
         | Failed s -> $"Failed: {s}"
 
-type ProcessingConfig(config: ConfigureViewModel) =
-    member val NumCPUs = config.NumCPUs with get, set
-    member val MaxWordLength = config.MaxWordLength with get, set
-    member val MaxLineLength = config.MaxLineLength with get, set
-    member val NumCandidates = config.NumCandidates with get, set
-    member val ModelPath = config.ModelPath with get, set
-    member val ScorerPath = config.ScorerPath with get, set
+type ProcessingConfig(?config: ConfigureViewModel) =
+    member val NumCPUs = match config with | Some config -> config.NumCPUs | None -> 1 with get, set
+    member val MaxWordLength = match config with | Some config -> config.MaxWordLength | None -> 5 with get, set
+    member val MaxLineLength = match config with | Some config -> config.MaxLineLength | None -> 10000 with get, set
+    member val NumCandidates = match config with | Some config -> config.NumCandidates | None -> 1u with get, set
+    member val ModelPath = config |> Option.map(fun config -> config.ModelPath) |> Option.flatten with get, set
+    member val ScorerPath = config |> Option.map(fun config -> config.ScorerPath) |> Option.flatten with get, set
 
 type ProcessFile(inputFile: string, outputFile: string) =
     let mutable status = NotStarted
@@ -46,16 +46,18 @@ type ProcessFile(inputFile: string, outputFile: string) =
         [<CLIEvent>]
         member this.PropertyChanged = event.Publish
 
-type ProcessingViewModel(config: ConfigureViewModel) =
+type ProcessingViewModel() =
     inherit ViewModelBase()
 
     static member Log =
         NLog.LogManager.GetCurrentClassLogger()
 
     member val ProcessingFiles = ObservableCollection([]) with get, set
-    member val Config = ProcessingConfig(config) with get
+    member val Config = ProcessingConfig() with get, set
     member val Finished = false with get, set
-    member val TotalTimeTaken = "" with get, set
+    member val TotalTimeTaken = "Transcription completed in 0.00s " with get, set
+    member val cancelTokenSource = new CancellationTokenSource()
+
 
     member this.SetFiles(fileListConfig: List<FileListEntry>) =
         this.ProcessingFiles.Clear()
@@ -63,6 +65,9 @@ type ProcessingViewModel(config: ConfigureViewModel) =
         fileListConfig
         |> Seq.iter (fun f -> this.ProcessingFiles.Add(ProcessFile(f.In, f.Out)))
 
+    member this.SetConfig(config: ConfigureViewModel) =
+        this.Config <- ProcessingConfig(config)
+    
     member this.NumFilesDone() =
         (0, this.ProcessingFiles)
         ||> Seq.fold (fun acc file ->
@@ -71,6 +76,9 @@ type ProcessingViewModel(config: ConfigureViewModel) =
             | Working -> acc + 0
             | Done _
             | Failed _ -> acc + 1)
+        
+    member this.CancelJob() =
+        this.cancelTokenSource.Cancel()
 
     member this.ProcessFiles() =
         // Note that STT clients cannot be "shared" across a concurrent "job" - each job needs its own dedicated
@@ -98,7 +106,7 @@ type ProcessingViewModel(config: ConfigureViewModel) =
             |> Seq.toList
 
         let clientIndices =
-            [ for i in 0 .. numClients - 1 -> i ]
+            [ for i in 0 .. clients.Length - 1 -> i ]
             |> ResizeArray
 
         assert (clientIndices.Count = clients.Length)
@@ -124,7 +132,7 @@ type ProcessingViewModel(config: ConfigureViewModel) =
                     System.Diagnostics.Stopwatch.StartNew()
 
                 let transcription =
-                    client.Transcribe(file.In, this.Config.NumCandidates)
+                    client.Transcribe(file.In, this.Config.NumCandidates, this.cancelTokenSource.Token)
 
                 perFileWatch.Stop()
 

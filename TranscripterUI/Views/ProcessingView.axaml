@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:TranscripterUI.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="TranscripterUI.Views.ProcessingView">
 
     <Design.DataContext>
@@ -11,7 +11,7 @@
     </Design.DataContext>
 
     <Border Padding="35, 20,35,0">
-        <Grid RowDefinitions="Auto,*,85">
+        <Grid RowDefinitions="Auto,*,16,80">
             <StackPanel Grid.Row="0" Spacing="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                         Margin="15, 15">
                 <StackPanel Spacing="4">
@@ -93,22 +93,41 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
+            
+            <TextBlock HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Grid.Row="2"
+                       Margin="15,0"
+                       FontSize="14"
+                       Foreground="#99AAB5"
+                       FontFamily="{StaticResource OpenSans}"
+                       IsVisible="{Binding Finished}"
+                       Text="{Binding TotalTimeTaken}" />
 
-            <StackPanel Margin="15,0" Grid.Row="2" Spacing="10" IsVisible="{Binding Finished}">
-                <TextBlock HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           FontSize="14"
-                           Foreground="#99AAB5"
-                           FontFamily="{StaticResource OpenSans}"
-                           Text="{Binding TotalTimeTaken}" />
-                <Button Name="SelectFiles"
-                        Classes="Standard"
+            <StackPanel Margin="15,0" Grid.Row="3" VerticalAlignment="Center" Spacing="10" IsVisible="{Binding !Finished}">
+                <Button Classes="Cancel"
+                        Content="Cancel"
+                        Width="170"
+                        HorizontalAlignment="Left"
+                        FontSize="14"
+                        FontFamily="{StaticResource OpenSans}" />
+            </StackPanel>
+            
+            <StackPanel Margin="15,0" Grid.Row="3" VerticalAlignment="Center" IsVisible="{Binding Finished}" Orientation="Horizontal" Spacing="12">
+                <Button Classes="Standard"
                         Content="Transcribe other files"
                         Width="170"
                         HorizontalAlignment="Left"
                         FontSize="14"
                         FontFamily="{StaticResource OpenSans}"
                         Command="{Binding $parent[Window].DataContext.StartAgain}" />
+                <Button Classes="Standard"
+                        Content="Close"
+                        Width="170"
+                        HorizontalAlignment="Left"
+                        FontSize="14"
+                        FontFamily="{StaticResource OpenSans}"
+                        Command="{Binding $parent[Window].DataContext.Close}" />
             </StackPanel>
         </Grid>
     </Border>

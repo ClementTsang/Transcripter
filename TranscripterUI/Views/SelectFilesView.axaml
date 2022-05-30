@@ -31,8 +31,7 @@
                        Text="Note that you can select multiple files at once." />
         </StackPanel>
 
-        <Button Name="SelectFiles"
-                Classes="Standard"
+        <Button Classes="Standard"
                 Content="Select Files"
                 Width="120"
                 HorizontalAlignment="Center"

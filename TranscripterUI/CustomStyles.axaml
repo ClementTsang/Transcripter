@@ -54,6 +54,22 @@
         <Setter Property="Background" Value="#1e6fa8" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
+    
+    <Style Selector="Button.Cancel /template/ ContentPresenter">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="#f44336" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="Button:pointerover.Cancel /template/ ContentPresenter">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="#e21a0c" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
 
     <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
         <Setter Property="Background" Value="#268bd2" />
