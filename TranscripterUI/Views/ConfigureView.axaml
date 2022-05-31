@@ -169,7 +169,7 @@
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
-                        
+
                         <StackPanel Spacing="2">
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"

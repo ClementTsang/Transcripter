@@ -21,11 +21,11 @@ module Transcripter =
             with
             | _ -> return false
         }
-            
+
     type public TranscripterClient(stt: STT) =
         let client = stt
 
-        member this.Transcribe (inputPath: string, ?numAttempts: uint, ?token: CancellationToken) =
+        member this.Transcribe(inputPath: string, ?numAttempts: uint, ?token: CancellationToken) =
             if File.Exists inputPath then
                 let sampleRate = client.GetModelSampleRate()
 
@@ -56,8 +56,13 @@ module Transcripter =
                                         .WithCustomArgument("-async 1")
                                     |> ignore
                             )
+
                     match token with
-                    | Some token -> args.CancellableThrough(token).ProcessAsynchronously(true).Wait()
+                    | Some token ->
+                        args
+                            .CancellableThrough(token)
+                            .ProcessAsynchronously(true)
+                            .Wait()
                     | None -> args.ProcessAsynchronously(true).Wait()
 
                     let inputBytes = File.ReadAllBytes(wavPath)
@@ -71,7 +76,7 @@ module Transcripter =
                         match numAttempts with
                         | Some numAttempts -> numAttempts
                         | None -> 1u
-                    
+
                     let result =
                         client.SpeechToTextWithMetadata(buffer.ShortBuffer, bufferSize, numAttempts)
 

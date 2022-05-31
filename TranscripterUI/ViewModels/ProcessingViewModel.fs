@@ -22,23 +22,34 @@ type TranscriptLine(offset: float32) =
     member val Words: ResizeArray<string> = ResizeArray() with get, set
 
     member this.Display(index: int, format: FileType) =
-        let startTime = TimeSpan.FromSeconds (float this.Offset)
-        let endTime = TimeSpan.FromSeconds ((float this.Offset) + (float this.Duration))
-        
+        let startTime =
+            TimeSpan.FromSeconds(float this.Offset)
+
+        let endTime =
+            TimeSpan.FromSeconds((float this.Offset) + (float this.Duration))
+
         match format with
         | FileType.SRT ->
-            let startTimeDisplay = startTime.ToString($@"hh\:mm\:ss\,fff")
-            let endTimeDisplay = endTime.ToString($@"hh\:mm\:ss\,fff")
+            let startTimeDisplay =
+                startTime.ToString($@"hh\:mm\:ss\,fff")
+
+            let endTimeDisplay =
+                endTime.ToString($@"hh\:mm\:ss\,fff")
+
             let line = this.Words |> String.concat " "
-        
+
             $"{index + 1}\n{startTimeDisplay} --> {endTimeDisplay}\n{line}\n"
         | FileType.VTT ->
-            let startTimeDisplay = startTime.ToString($@"hh\:mm\:ss\.fff")
-            let endTimeDisplay = endTime.ToString($@"hh\:mm\:ss\.fff")
+            let startTimeDisplay =
+                startTime.ToString($@"hh\:mm\:ss\.fff")
+
+            let endTimeDisplay =
+                endTime.ToString($@"hh\:mm\:ss\.fff")
+
             let line = this.Words |> String.concat " "
-        
+
             $"{startTimeDisplay} --> {endTimeDisplay}\n{line}\n"
-        
+
 
 
 type ProcessFileState =
@@ -240,39 +251,46 @@ type ProcessingViewModel() =
                 scratchLine <- None)
 
         match scratchLine with
-        | Some s -> if s.Words.Count > 0 then
-                        transcriptionList.Add(s)
+        | Some s ->
+            if s.Words.Count > 0 then
+                transcriptionList.Add(s)
         | None -> ()
-        
+
 
         transcriptionList
 
     member this.WriteTranscript(transcript: ResizeArray<TranscriptLine>, outputPath: string) =
         let outputFormat =
-            let extension = (Path.GetExtension outputPath).ToLower()
+            let extension =
+                (Path.GetExtension outputPath).ToLower()
+
             match extension with
             | ".srt" -> Ok(FileType.SRT)
             | ".vtt" -> Ok(FileType.VTT)
             | _ -> Error($"invalid file type ({extension})")
-        
+
         match outputFormat with
         | Ok ft ->
             // We lock this to writing one file at a time for safety reasons.
             this.FileWriteMutex.WaitOne() |> ignore
-            
-            if (not(this.Config.OverwriteFiles) && not (File.Exists outputPath)) || this.Config.OverwriteFiles then
-                File.WriteAllText (
+
+            if (not (this.Config.OverwriteFiles)
+                && not (File.Exists outputPath))
+               || this.Config.OverwriteFiles then
+                File.WriteAllText(
                     outputPath,
-                    transcript |> Seq.indexed |> Seq.map(
-                        fun (index, t) ->
-                            t.Display(index, ft)
-                    ) |> String.concat "\n")
+                    transcript
+                    |> Seq.indexed
+                    |> Seq.map (fun (index, t) -> t.Display(index, ft))
+                    |> String.concat "\n"
+                )
+
                 this.FileWriteMutex.ReleaseMutex()
                 Ok(())
             else
                 this.FileWriteMutex.ReleaseMutex()
                 Error("another file already exists at this location")
-            
+
         | Error err -> Error(err)
 
     member this.ProcessFiles() =
@@ -313,7 +331,9 @@ type ProcessingViewModel() =
             this.ProcessingFiles
             |> PSeq.withDegreeOfParallelism clients.Length
             |> PSeq.iter (fun file ->
-                if (not(this.Config.OverwriteFiles) && not(File.Exists file.Out)) || this.Config.OverwriteFiles then
+                if (not (this.Config.OverwriteFiles)
+                    && not (File.Exists file.Out))
+                   || this.Config.OverwriteFiles then
                     processMutex.WaitOne() |> ignore
                     let clientIndex = clientIndices[0]
                     clientIndices.RemoveAt(0)
@@ -338,12 +358,16 @@ type ProcessingViewModel() =
                         let transcript =
                             this.BuildTranscript(result)
 
-                        let writeTask = this.WriteTranscript(transcript, file.Out)
+                        let writeTask =
+                            this.WriteTranscript(transcript, file.Out)
+
                         perFileWatch.Stop()
+
                         let time =
                             (float perFileWatch.ElapsedMilliseconds) / 1000.0
+
                         ProcessingViewModel.Log.Debug $"Transcription + write task took %1.2f{time}s"
-                        
+
                         match writeTask with
                         | Ok _ ->
                             ProcessingViewModel.Log.Debug $"{file.In} write finished"
@@ -353,9 +377,10 @@ type ProcessingViewModel() =
                             file.Status <- ProcessFileState.Failed $"{err} (%1.2f{time}s)"
                     | Error err ->
                         perFileWatch.Stop()
+
                         let time =
                             (float perFileWatch.ElapsedMilliseconds) / 1000.0
-                        
+
                         ProcessingViewModel.Log.Debug $"{file.In} task - err: {err}"
                         file.Status <- ProcessFileState.Failed $"{err} (%1.2f{time}s)"
 

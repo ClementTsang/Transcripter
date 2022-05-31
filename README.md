@@ -19,7 +19,7 @@ one must have FFMpeg installed on their computer and accessible on PATH.
 ## Development
 
 To work on this, clone the repo and install FFMpeg, then run the setup script (`setup.sh`) to download all additional
-required files. (TODO)
+required files. Note this script relies on `wget` to download files.
 
 This project is written in F#, and as of writing, built on .NET Core 6.0.102. Personally, I wrote this on
 Linux and used Rider for development.
@@ -59,9 +59,11 @@ seems to work. This appears to be [a bug](https://github.com/dotnet/sdk/issues/9
 ## Disclaimer
 
 Note that Transcripter is not perfect - the generated transcripts are not guaranteed to be
-completely correct, and its generated transcripts should be treated as more of a starting point if perfect correctness is required.
+completely correct, and its generated transcripts should be treated as more of a starting point if perfect correctness
+is required.
 
-Furthermore, this project isn't one that I'm actively going to maintain too much - it was more a project for fun. I'll accept bug reports and PRs though.
+Furthermore, this project isn't one that I'm actively going to maintain too much - it was more a project for fun. I'll
+accept bug reports and PRs though.
 
 ## Motivation
 
