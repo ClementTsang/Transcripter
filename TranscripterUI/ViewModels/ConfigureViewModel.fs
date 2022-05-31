@@ -62,8 +62,9 @@ type ConfigureViewModel() =
 
     member val OutputSelectedIndex = 0 with get, set
 
-    member val OverwriteComboOptions = [ "Yes"; "No" ]
+    static member val YesNoComboOptions = [ "Yes"; "No" ]
     member val OverwriteSelectedIndex = 1 with get, set
+    member val AutoSentenceIndex = 1 with get, set
 
     member val MaxWordLength = 10 with get, set
     member val MaxLineLength = 100 with get, set

@@ -1,5 +1,7 @@
 namespace TranscripterUI.ViewModels
 
+open System
+open System.IO
 open ReactiveUI
 open System.ComponentModel
 open System.Collections.ObjectModel
@@ -12,6 +14,32 @@ type TranscriptWord(offset: float32) =
     member val Offset = offset with get, set
     member val Duration = 0f with get, set
     member val Word = "" with get, set
+
+
+type TranscriptLine(offset: float32) =
+    member val Offset = offset with get, set
+    member val Duration = 0f with get, set
+    member val Words: ResizeArray<string> = ResizeArray() with get, set
+
+    member this.Display(index: int, format: FileType) =
+        let startTime = TimeSpan.FromSeconds (float this.Offset)
+        let endTime = TimeSpan.FromSeconds ((float this.Offset) + (float this.Duration))
+        
+        match format with
+        | FileType.SRT ->
+            let startTimeDisplay = startTime.ToString($@"hh\:mm\:ss\,fff")
+            let endTimeDisplay = endTime.ToString($@"hh\:mm\:ss\,fff")
+            let line = this.Words |> String.concat " "
+        
+            $"{index + 1}\n{startTimeDisplay} --> {endTimeDisplay}\n{line}\n"
+        | FileType.VTT ->
+            let startTimeDisplay = startTime.ToString($@"hh\:mm\:ss\.fff")
+            let endTimeDisplay = endTime.ToString($@"hh\:mm\:ss\.fff")
+            let line = this.Words |> String.concat " "
+        
+            $"{startTimeDisplay} --> {endTimeDisplay}\n{line}\n"
+        
+
 
 type ProcessFileState =
     | NotStarted
@@ -29,6 +57,11 @@ type ProcessFileState =
         | Failed s -> $"Failed: {s}"
 
 type ProcessingConfig(?config: ConfigureViewModel) =
+    member val OverwriteFiles =
+        match config with
+        | Some config -> config.OverwriteSelectedIndex = 0
+        | None -> false
+
     member val NumCPUs =
         match config with
         | Some config -> config.NumCPUs
@@ -67,6 +100,11 @@ type ProcessingConfig(?config: ConfigureViewModel) =
 
         ConfigureViewModel.LineSplittingOptions[index]
 
+    member val AutomaticSentence =
+        match config with
+        | Some config -> config.AutoSentenceIndex = 1
+        | None -> false
+
 type ProcessFile(inputFile: string, outputFile: string) =
     let mutable status = NotStarted
     let event = Event<_, _>()
@@ -94,6 +132,7 @@ type ProcessingViewModel() =
     member val Config = ProcessingConfig() with get, set
     member val Finished = false with get, set
     member val TotalTimeTaken = "Transcription completed in 0.00s " with get, set
+    member val FileWriteMutex = new Mutex()
 
     member this.SetFiles(fileListConfig: List<FileListEntry>) =
         this.ProcessingFiles.Clear()
@@ -113,6 +152,22 @@ type ProcessingViewModel() =
             | Done _
             | Failed _ -> acc + 1)
 
+    member this.shouldSplit(currentLine: TranscriptLine) =
+        match this.Config.LineSplitStrategy with
+        | LineControlType.WordLength ->
+            currentLine.Words.Count
+            >= this.Config.MaxWordLength
+        | LineControlType.CharLength ->
+            currentLine.Words
+            |> Seq.sumBy (fun word -> word.Length)
+            >= this.Config.MaxLineLength
+        | LineControlType.WordAndCharLength ->
+            currentLine.Words.Count
+            >= this.Config.MaxWordLength
+            || currentLine.Words
+               |> Seq.sumBy (fun word -> word.Length)
+               >= this.Config.MaxLineLength
+
     member this.BuildTranscript(result: STTClient.Models.Metadata) =
         let bestTranscript =
             result.Transcripts
@@ -121,39 +176,17 @@ type ProcessingViewModel() =
         let mutable currentWord: Option<TranscriptWord> =
             None
 
-        let mutable currentLine: ResizeArray<TranscriptWord> =
-            ResizeArray()
-
-        let mutable transcriptList: ResizeArray<ResizeArray<TranscriptWord>> =
+        let mutable wordList: ResizeArray<TranscriptWord> =
             ResizeArray()
 
         bestTranscript.Tokens
         |> Seq.iter (fun token ->
-            if System.String.IsNullOrWhiteSpace token.Text then
+            if String.IsNullOrWhiteSpace token.Text then
                 match currentWord with
                 | Some word ->
                     word.Duration <- max 0.0f (token.StartTime - word.Offset)
-                    currentLine.Add(word)
+                    wordList.Add(word)
                     currentWord <- None
-
-                    match this.Config.LineSplitStrategy with
-                    | LineControlType.WordLength ->
-                        if currentLine.Count >= this.Config.MaxWordLength then
-                            transcriptList.Add(currentLine)
-                            currentLine <- ResizeArray()
-                    | LineControlType.CharLength ->
-                        if currentLine
-                           |> Seq.sumBy (fun word -> word.Word.Length)
-                           >= this.Config.MaxLineLength then
-                            transcriptList.Add(currentLine)
-                            currentLine <- ResizeArray()
-                    | LineControlType.WordAndCharLength ->
-                        if currentLine.Count >= this.Config.MaxWordLength
-                           || currentLine
-                              |> Seq.sumBy (fun word -> word.Word.Length)
-                              >= this.Config.MaxLineLength then
-                            transcriptList.Add(currentLine)
-                            currentLine <- ResizeArray()
                 | None -> ()
             else
                 let word =
@@ -164,22 +197,83 @@ type ProcessingViewModel() =
                 word.Word <- word.Word + token.Text
                 word.Duration <- max 0.0f (token.StartTime - word.Offset)
                 currentWord <- Some(word))
-        
+
         match currentWord with
         | Some word ->
             if word.Word.Length > 0 then
-                currentLine.Add(word)
-                transcriptList.Add(currentLine)
+                wordList.Add(word)
         | None -> ()
 
-        transcriptList
-        |> Seq.iter (fun line ->
-            line
-            |> Seq.iter (fun word -> printfn $"{word.Word} - at {word.Offset}, for {word.Duration} seconds")
+        if this.Config.AutomaticSentence then
+            let sentence_sec_offset_threshold = 0.2f
 
-            printfn "====")
+            wordList
+            |> Seq.windowed 2
+            |> Seq.iter (fun window ->
+                let a = window[0]
+                let b = window[1]
 
-        ()
+                if b.Offset - (a.Offset + a.Duration) > sentence_sec_offset_threshold then
+                    a.Word <- a.Word + ".")
+
+            if wordList.Count > 0 then
+                wordList[wordList.Count - 1].Word <- wordList[wordList.Count - 1].Word + "."
+
+        let mutable scratchLine = None
+
+        let mutable transcriptionList: ResizeArray<TranscriptLine> =
+            ResizeArray()
+
+        wordList
+        |> Seq.iter (fun word ->
+            let mutable currLine =
+                match scratchLine with
+                | Some s -> s
+                | None -> TranscriptLine(word.Offset)
+
+            currLine.Words.Add(word.Word)
+            currLine.Duration <- currLine.Duration + word.Duration
+            scratchLine <- Some(currLine)
+
+            if this.shouldSplit currLine then
+                transcriptionList.Add(currLine)
+                scratchLine <- None)
+
+        match scratchLine with
+        | Some s -> if s.Words.Count > 0 then
+                        transcriptionList.Add(s)
+        | None -> ()
+        
+
+        transcriptionList
+
+    member this.WriteTranscript(transcript: ResizeArray<TranscriptLine>, outputPath: string) =
+        let outputFormat =
+            let extension = (Path.GetExtension outputPath).ToLower()
+            match extension with
+            | ".srt" -> Ok(FileType.SRT)
+            | ".vtt" -> Ok(FileType.VTT)
+            | _ -> Error($"invalid file type ({extension})")
+        
+        match outputFormat with
+        | Ok ft ->
+            // We lock this to writing one file at a time for safety reasons.
+            this.FileWriteMutex.WaitOne() |> ignore
+            
+            if (not(this.Config.OverwriteFiles) && not (File.Exists outputPath)) || this.Config.OverwriteFiles then
+                File.WriteAllText (
+                    outputPath,
+                    transcript |> Seq.indexed |> Seq.map(
+                        fun (index, t) ->
+                            t.Display(index, ft)
+                    ) |> String.concat "\n")
+                this.FileWriteMutex.ReleaseMutex()
+                Ok(())
+            else
+                this.FileWriteMutex.ReleaseMutex()
+                Error("another file already exists at this location")
+            
+        | Error err -> Error(err)
 
     member this.ProcessFiles() =
         // Note that STT clients cannot be "shared" across a concurrent "job" - each job needs its own dedicated
@@ -218,48 +312,58 @@ type ProcessingViewModel() =
         if not clients.IsEmpty then
             this.ProcessingFiles
             |> PSeq.withDegreeOfParallelism clients.Length
-            |> PSeq.map (fun file ->
-                processMutex.WaitOne() |> ignore
+            |> PSeq.iter (fun file ->
+                if (not(this.Config.OverwriteFiles) && not(File.Exists file.Out)) || this.Config.OverwriteFiles then
+                    processMutex.WaitOne() |> ignore
+                    let clientIndex = clientIndices[0]
+                    clientIndices.RemoveAt(0)
+                    processMutex.ReleaseMutex()
 
-                let clientIndex = clientIndices[0]
-                clientIndices.RemoveAt(0)
+                    let client = clients[clientIndex]
 
-                processMutex.ReleaseMutex()
+                    file.Status <- ProcessFileState.Working
+                    ProcessingViewModel.Log.Debug($"transcribing {file.In}")
 
-                let client = clients[clientIndex]
+                    let perFileWatch =
+                        System.Diagnostics.Stopwatch.StartNew()
 
-                file.Status <- ProcessFileState.Working
-                ProcessingViewModel.Log.Debug($"transcribing {file.In}")
+                    let transcription =
+                        client.Transcribe(file.In, this.Config.NumCandidates)
 
-                let perFileWatch =
-                    System.Diagnostics.Stopwatch.StartNew()
 
-                let transcription =
-                    client.Transcribe(file.In, this.Config.NumCandidates)
+                    match transcription with
+                    | Ok result ->
+                        ProcessingViewModel.Log.Debug $"{file.In} task - ok"
 
-                perFileWatch.Stop()
+                        let transcript =
+                            this.BuildTranscript(result)
 
-                let time =
-                    (float perFileWatch.ElapsedMilliseconds) / 1000.0
+                        let writeTask = this.WriteTranscript(transcript, file.Out)
+                        perFileWatch.Stop()
+                        let time =
+                            (float perFileWatch.ElapsedMilliseconds) / 1000.0
+                        ProcessingViewModel.Log.Debug $"Transcription + write task took %1.2f{time}s"
+                        
+                        match writeTask with
+                        | Ok _ ->
+                            ProcessingViewModel.Log.Debug $"{file.In} write finished"
+                            file.Status <- ProcessFileState.Done $"(%1.2f{time}s)"
+                        | Error err ->
+                            ProcessingViewModel.Log.Debug $"{file.In} write failed - err: {err}"
+                            file.Status <- ProcessFileState.Failed $"{err} (%1.2f{time}s)"
+                    | Error err ->
+                        perFileWatch.Stop()
+                        let time =
+                            (float perFileWatch.ElapsedMilliseconds) / 1000.0
+                        
+                        ProcessingViewModel.Log.Debug $"{file.In} task - err: {err}"
+                        file.Status <- ProcessFileState.Failed $"{err} (%1.2f{time}s)"
 
-                ProcessingViewModel.Log.Debug $"Transcription task took %1.2f{time}s"
-
-                match transcription with
-                | Ok result ->
-                    ProcessingViewModel.Log.Debug $"{file.In} task - ok"
-                    this.BuildTranscript(result)
-                    file.Status <- ProcessFileState.Done $"(%1.2f{time}s)"
-                | Error err ->
-                    ProcessingViewModel.Log.Debug $"{file.In} task - err: {err}"
-                    file.Status <- ProcessFileState.Failed $"{err} (%1.2f{time}s)"
-
-                processMutex.WaitOne() |> ignore
-
-                clientIndices.Add(clientIndex)
-
-                processMutex.ReleaseMutex())
-            |> PSeq.toArray
-            |> ignore
+                    processMutex.WaitOne() |> ignore
+                    clientIndices.Add(clientIndex)
+                    processMutex.ReleaseMutex()
+                else
+                    file.Status <- ProcessFileState.Failed "another file already exists at this location")
         else
             // TODO: Handle the case all clients fail.
             ()
