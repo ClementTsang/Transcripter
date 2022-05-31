@@ -93,7 +93,7 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
-            
+
             <TextBlock HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        Grid.Row="2"
@@ -104,16 +104,19 @@
                        IsVisible="{Binding Finished}"
                        Text="{Binding TotalTimeTaken}" />
 
-            <StackPanel Margin="15,0" Grid.Row="3" VerticalAlignment="Center" Spacing="10" IsVisible="{Binding !Finished}">
-                <Button Classes="Cancel"
-                        Content="Cancel"
-                        Width="170"
-                        HorizontalAlignment="Left"
-                        FontSize="14"
-                        FontFamily="{StaticResource OpenSans}" />
-            </StackPanel>
-            
-            <StackPanel Margin="15,0" Grid.Row="3" VerticalAlignment="Center" IsVisible="{Binding Finished}" Orientation="Horizontal" Spacing="12">
+            <!-- <StackPanel Margin="15,0" Grid.Row="3" VerticalAlignment="Center" Spacing="10" -->
+            <!--             IsVisible="{Binding !Finished}"> -->
+            <!--     <Button Classes="Cancel" -->
+            <!--             Content="Cancel" -->
+            <!--             Width="170" -->
+            <!--             HorizontalAlignment="Left" -->
+            <!--             FontSize="14" -->
+            <!--             FontFamily="{StaticResource OpenSans}" -->
+            <!--             Command="{Binding CancelTranscription}" /> -->
+            <!-- </StackPanel> -->
+
+            <StackPanel Margin="15,0" Grid.Row="3" VerticalAlignment="Center" IsVisible="{Binding Finished}"
+                        Orientation="Horizontal" Spacing="12">
                 <Button Classes="Standard"
                         Content="Transcribe other files"
                         Width="170"
@@ -127,7 +130,7 @@
                         HorizontalAlignment="Left"
                         FontSize="14"
                         FontFamily="{StaticResource OpenSans}"
-                        Command="{Binding $parent[Window].DataContext.Close}" />
+                        Command="{Binding $parent[Window].DataContext.CloseTranscripter}" />
             </StackPanel>
         </Grid>
     </Border>

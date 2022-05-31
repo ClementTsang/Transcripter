@@ -139,7 +139,7 @@
                                     <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
                                         <NumericUpDown Minimum="1"
                                                        Value="{Binding MaxWordLength, Mode=TwoWay}"
-                                                       Watermark="10000" />
+                                                       Watermark="100" />
                                     </Panel>
                                 </StackPanel>
 
@@ -163,7 +163,7 @@
                                     <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
                                         <NumericUpDown Minimum="1"
                                                        Value="{Binding MaxLineLength, Mode=TwoWay}"
-                                                       Watermark="10000" />
+                                                       Watermark="1" />
                                     </Panel>
                                 </StackPanel>
                             </StackPanel>

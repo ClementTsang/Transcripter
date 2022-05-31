@@ -66,7 +66,7 @@ type ConfigureViewModel() =
     member val OverwriteSelectedIndex = 1 with get, set
 
     member val MaxWordLength = 10 with get, set
-    member val MaxLineLength = 10000 with get, set
+    member val MaxLineLength = 100 with get, set
     member val NumCandidates = 1u with get, set
 
     member val ShowOpenFileDialog = Interaction<OpenFileDialog, List<string>>()
@@ -80,8 +80,8 @@ type ConfigureViewModel() =
           LineControlType.CharLength
           LineControlType.WordAndCharLength ]
 
-    member val LineLengthDisplay = (true, 1.0) with get, set
-    member val WordLengthDisplay = (false, 0.5) with get, set
+    member val WordLengthDisplay = (true, 1.0) with get, set
+    member val LineLengthDisplay = (false, 0.5) with get, set
 
     member this.LineSplittingIndex
         with get () = lineSplittingIndex
@@ -91,14 +91,14 @@ type ConfigureViewModel() =
 
                 match ConfigureViewModel.LineSplittingOptions[lineSplittingIndex] with
                 | LineControlType.WordLength ->
-                    this.LineLengthDisplay <- (true, 1.0)
-                    this.WordLengthDisplay <- (false, 0.5)
-                | LineControlType.CharLength ->
+                    this.WordLengthDisplay <- (true, 1.0)
                     this.LineLengthDisplay <- (false, 0.5)
-                    this.WordLengthDisplay <- (true, 1.0)
-                | LineControlType.WordAndCharLength ->
+                | LineControlType.CharLength ->
+                    this.WordLengthDisplay <- (false, 0.5)
                     this.LineLengthDisplay <- (true, 1.0)
+                | LineControlType.WordAndCharLength ->
                     this.WordLengthDisplay <- (true, 1.0)
+                    this.LineLengthDisplay <- (true, 1.0)
 
                 this.RaisePropertyChanged("LineSplittingIndex")
                 this.RaisePropertyChanged("LineLengthDisplay")

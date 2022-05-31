@@ -137,6 +137,7 @@ type MainWindowViewModel() =
                     this.FileListVM.FileListConfiguration
                     |> Seq.toList
                 )
+
                 pvm.SetConfig(this.ConfigureVM)
 
                 this.CurrentVM <- pvm
@@ -145,11 +146,10 @@ type MainWindowViewModel() =
 
     member this.Transcribe =
         ReactiveCommand.CreateFromTask(this.TranscribeTask)
-        
-    member this.Close() =
+
+    member this.CloseTranscripter() =
         match Application.Current.ApplicationLifetime with
-        | :? IClassicDesktopStyleApplicationLifetime as window ->
-            window.Shutdown()
+        | :? IClassicDesktopStyleApplicationLifetime as window -> window.Shutdown()
         | _ -> ()
 
     member this.StartAgain() =

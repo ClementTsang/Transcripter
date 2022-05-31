@@ -56,6 +56,11 @@ LD_LIBRARY_PATH=:
 
 seems to work. This appears to be [a bug](https://github.com/dotnet/sdk/issues/9586) with dotnet in general.
 
+## Disclaimer
+
+Note that Transcripter is not perfect - the generated transcripts are not guaranteed to be 
+completely correct, and its generated transcripts should be treated as more of a starting point if perfect correctness is required.
+
 ## Motivation
 
 I was looking for a simple offline program to get transcripts from a bunch of lecture recordings I had, and also wanted
