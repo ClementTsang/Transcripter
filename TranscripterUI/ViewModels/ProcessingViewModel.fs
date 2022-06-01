@@ -16,10 +16,17 @@ type TranscriptWord(offset: float32) =
     member val Word = "" with get, set
 
 
-type TranscriptLine(offset: float32) =
-    member val Offset = offset with get, set
+type TranscriptLine() =
+    member val Offset = 0f with get, set
     member val Duration = 0f with get, set
     member val Words: ResizeArray<string> = ResizeArray() with get, set
+
+    member this.AddWord(word: TranscriptWord) =
+        if this.Words.Count = 0 then
+            this.Offset <- word.Offset
+
+        this.Words.Add word.Word
+        this.Duration <- word.Duration + word.Offset - this.Offset
 
     member this.Display(index: int, format: FileType) =
         let startTime =
@@ -230,33 +237,24 @@ type ProcessingViewModel() =
             if wordList.Count > 0 then
                 wordList[wordList.Count - 1].Word <- wordList[wordList.Count - 1].Word + "."
 
-        let mutable scratchLine = None
-
         let mutable transcriptionList: ResizeArray<TranscriptLine> =
-            ResizeArray()
+            [ TranscriptLine() ] |> ResizeArray
 
         wordList
         |> Seq.iter (fun word ->
-            let mutable currLine =
-                match scratchLine with
-                | Some s -> s
-                | None -> TranscriptLine(word.Offset)
-
-            currLine.Words.Add(word.Word)
-            currLine.Duration <- currLine.Duration + word.Duration
-            scratchLine <- Some(currLine)
-
+            let currLine = transcriptionList[transcriptionList.Count - 1]
             if this.shouldSplit currLine then
-                transcriptionList.Add(currLine)
-                scratchLine <- None)
+                if word.Offset - (currLine.Duration + currLine.Offset) < 0.1f then
+                    currLine.Duration <- word.Offset - currLine.Offset
+                else
+                    currLine.Duration <- currLine.Duration + 0.1f
+                transcriptionList.Add(TranscriptLine())
 
-        match scratchLine with
-        | Some s ->
-            if s.Words.Count > 0 then
-                transcriptionList.Add(s)
-        | None -> ()
+            transcriptionList[transcriptionList.Count - 1]
+                .AddWord word)
 
-
+        transcriptionList[transcriptionList.Count - 1].Duration <- transcriptionList[transcriptionList.Count - 1].Duration + 0.1f
+        
         transcriptionList
 
     member this.WriteTranscript(transcript: ResizeArray<TranscriptLine>, outputPath: string) =
