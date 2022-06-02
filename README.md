@@ -7,6 +7,8 @@
   </p>
 </div>
 
+https://user-images.githubusercontent.com/34804052/171553226-64915e3e-f42a-4b44-a44a-8d21cac70509.mp4
+
 ## Development
 
 To work on this, clone the repo and install FFMpeg + ffprobe, then run the setup script (`setup.sh`) to download all additional
