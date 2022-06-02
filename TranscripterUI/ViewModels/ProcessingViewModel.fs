@@ -122,7 +122,7 @@ type ProcessingConfig(?config: ConfigureViewModel) =
 
     member val AutomaticSentence =
         match config with
-        | Some config -> config.AutoSentenceIndex = 1
+        | Some config -> config.AutoSentenceIndex = 0
         | None -> false
 
 type ProcessFile(inputFile: string, outputFile: string) =
