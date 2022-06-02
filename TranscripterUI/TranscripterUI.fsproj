@@ -5,68 +5,97 @@
         <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
         <TrimMode>copyused</TrimMode>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <PublishSingleFile>true</PublishSingleFile>
+        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
-        <Folder Include="Models\"/>
-        <AvaloniaResource Include="Assets\**"/>
-        <None Remove=".gitignore"/>
+        <Folder Include="Models\" />
+        <AvaloniaResource Include="Assets\**" />
+        <Content Include="model\english_huge_1.0.0_model.tflite">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
+        <Content Include="model\huge-vocabulary.scorer">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
+        <None Include="shared_libs\libstt.tflite.Linux\libkenlm.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libkenlm.so</TargetPath>
+        </None>
+        <None Include="shared_libs\libstt.tflite.Linux\libsox.so.3" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libsox.so.3</TargetPath>
+        </None>
+        <None Include="shared_libs\libstt.tflite.Linux\libstt.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <TargetPath>libstt.so</TargetPath>
+        </None>
+        <None Remove=".gitignore" />
         <None Include="NLog.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ViewModels\ViewModelBase.fs"/>
-        <Compile Include="Models\Step.fs"/>
-        <Compile Include="Models\InputFile.fs"/>
-        <Compile Include="ViewModels\SelectFilesViewModel.fs"/>
-        <Compile Include="ViewModels\ConfigureViewModel.fs"/>
-        <Compile Include="ViewModels\FileListViewModel.fs"/>
-        <Compile Include="ViewModels\ProcessingViewModel.fs"/>
-        <Compile Include="ViewModels\InvalidFilesViewModel.fs"/>
-        <Compile Include="ViewModels\CurrentStepViewModel.fs"/>
-        <Compile Include="ViewModels\MainWindowViewModel.fs"/>
-        <Compile Include="Views\ConfigureView.fs"/>
-        <Compile Include="Views\CurrentStepView.axaml.fs"/>
-        <Compile Include="Views\FileListView.axaml.fs"/>
-        <Compile Include="Views\InvalidFilesView.axaml.fs"/>
-        <Compile Include="Views\ProcessingView.axaml.fs"/>
-        <Compile Include="Views\SelectFilesView.axaml.fs"/>
-        <Compile Include="Views\MainWindow.axaml.fs"/>
-        <Compile Include="ViewLocator.fs"/>
-        <Compile Include="App.axaml.fs"/>
-        <Compile Include="Program.fs"/>
+        <Compile Include="ViewModels\ViewModelBase.fs" />
+        <Compile Include="Models\Step.fs" />
+        <Compile Include="Models\InputFile.fs" />
+        <Compile Include="ViewModels\SelectFilesViewModel.fs" />
+        <Compile Include="ViewModels\ConfigureViewModel.fs" />
+        <Compile Include="ViewModels\FileListViewModel.fs" />
+        <Compile Include="ViewModels\ProcessingViewModel.fs" />
+        <Compile Include="ViewModels\InvalidFilesViewModel.fs" />
+        <Compile Include="ViewModels\CurrentStepViewModel.fs" />
+        <Compile Include="ViewModels\MainWindowViewModel.fs" />
+        <Compile Include="Views\ConfigureView.fs" />
+        <Compile Include="Views\CurrentStepView.axaml.fs" />
+        <Compile Include="Views\FileListView.axaml.fs" />
+        <Compile Include="Views\InvalidFilesView.axaml.fs" />
+        <Compile Include="Views\ProcessingView.axaml.fs" />
+        <Compile Include="Views\SelectFilesView.axaml.fs" />
+        <Compile Include="Views\MainWindow.axaml.fs" />
+        <Compile Include="ViewLocator.fs" />
+        <Compile Include="App.axaml.fs" />
+        <Compile Include="Program.fs" />
     </ItemGroup>
     <ItemGroup>
         <!--This helps with theme dll-s trimming.
         If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
         https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
-        <TrimmableAssembly Include="Avalonia.Themes.Fluent"/>
-        <TrimmableAssembly Include="Avalonia.Themes.Default"/>
+        <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
+        <TrimmableAssembly Include="Avalonia.Themes.Default" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.14"/>
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.14"/>
+        <PackageReference Include="Avalonia" Version="0.10.14" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.14" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.14"/>
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.14"/>
-        <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0"/>
-        <PackageReference Include="NLog" Version="5.0.0"/>
-        <PackageReference Update="FSharp.Core" Version="6.0.4"/>
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.14" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.14" />
+        <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0" />
+        <PackageReference Include="NLog" Version="5.0.0" />
+        <PackageReference Update="FSharp.Core" Version="6.0.4" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj"/>
-        <ProjectReference Include="..\TranscripterLib\TranscripterLib.fsproj"/>
+        <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj" />
+        <ProjectReference Include="..\TranscripterLib\TranscripterLib.fsproj" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="..\README.md">
             <Link>README.md</Link>
         </Content>
-        <Content Include="README.md"/>
+        <Content Include="README.md" />
     </ItemGroup>
     <ItemGroup>
-        <AvaloniaXaml Remove="Icons\**"/>
+        <AvaloniaXaml Remove="Icons\**" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Remove="Icons\**"/>
+        <EmbeddedResource Remove="Icons\**" />
     </ItemGroup>
 </Project>

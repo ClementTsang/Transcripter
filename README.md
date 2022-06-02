@@ -7,24 +7,15 @@
   </p>
 </div>
 
-## Usage
-
-### Install FFMpeg
-
-This program relies on FFMpeg to convert video and audio files into an appropriate format for speech-to-text. As such,
-one must have FFMpeg installed on their computer and accessible on PATH.
-
---- TODO: In progress ---
-
 ## Development
 
-To work on this, clone the repo and install FFMpeg, then run the setup script (`setup.sh`) to download all additional
+To work on this, clone the repo and install FFMpeg + ffprobe, then run the setup script (`setup.sh`) to download all additional
 required files. Note this script relies on `wget` to download files.
 
 This project is written in F#, and as of writing, built on .NET Core 6.0.102. Personally, I wrote this on
 Linux and used Rider for development.
 
-### Project Structure
+### Project structure
 
 This repo is split into two main parts:
 
@@ -60,7 +51,7 @@ seems to work. This appears to be [a bug](https://github.com/dotnet/sdk/issues/9
 
 Note that Transcripter is not perfect - the generated transcripts are not guaranteed to be
 completely correct, and its generated transcripts should be treated as more of a starting point if perfect correctness
-is required.
+is required. Transcripter will also struggle on words that aren't clearly pronounced, or words that are not standard English.
 
 Furthermore, this project isn't one that I'm actively going to maintain too much - it was more a project for fun. I'll
 accept bug reports and PRs though.

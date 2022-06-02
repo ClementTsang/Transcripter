@@ -103,12 +103,14 @@ type ProcessingConfig(?config: ConfigureViewModel) =
     member val ModelPath =
         config
         |> Option.map (fun config -> config.ModelPath)
-        |> Option.flatten with get, set
+        |> Option.flatten
+        |> Option.defaultValue "model/english_huge_1.0.0_model.tflite" with get, set
 
     member val ScorerPath =
         config
         |> Option.map (fun config -> config.ScorerPath)
-        |> Option.flatten with get, set
+        |> Option.flatten
+        |> Option.defaultValue "model/huge-vocabulary.scorer" with get, set
 
     member val LineSplitStrategy =
         let index =
@@ -272,7 +274,7 @@ type ProcessingViewModel() =
             // We lock this to writing one file at a time for safety reasons.
             this.FileWriteMutex.WaitOne() |> ignore
 
-            if (not (this.Config.OverwriteFiles)
+            if (not this.Config.OverwriteFiles
                 && not (File.Exists outputPath))
                || this.Config.OverwriteFiles then
                 File.WriteAllText(
@@ -303,7 +305,7 @@ type ProcessingViewModel() =
 
         let numClients =
             min this.Config.NumCPUs this.ProcessingFiles.Count
-
+            
         let clients =
             [ for _ in 1..numClients -> Transcripter.NewClient(true, this.Config.ModelPath, this.Config.ScorerPath) ]
             |> Seq.choose (fun client ->
@@ -329,7 +331,7 @@ type ProcessingViewModel() =
             this.ProcessingFiles
             |> PSeq.withDegreeOfParallelism clients.Length
             |> PSeq.iter (fun file ->
-                if (not (this.Config.OverwriteFiles)
+                if (not this.Config.OverwriteFiles
                     && not (File.Exists file.Out))
                    || this.Config.OverwriteFiles then
                     processMutex.WaitOne() |> ignore
@@ -388,7 +390,7 @@ type ProcessingViewModel() =
                 else
                     file.Status <- ProcessFileState.Failed "another file already exists at this location")
         else
-            // TODO: Handle the case all clients fail.
+            // TODO: Handle the case all clients fail. Also probably want to wrap this with a try/catch.
             ()
 
         totalFileWatch.Stop()

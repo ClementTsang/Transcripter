@@ -91,25 +91,15 @@ module Transcripter =
             else
                 Error($"{inputPath} does not exist.")
 
-    let public NewClient (useScorer: bool, modelFilePath: Option<string>, scorerFilePath: Option<string>) =
-        let modelFile =
-            match modelFilePath with
-            | Some path -> path
-            | None -> Path.Combine(Environment.CurrentDirectory, @"model/english_huge_1.0.0_model.tflite")
-
-        let scorerFile =
-            match scorerFilePath with
-            | Some path -> path
-            | None -> Path.Combine(Environment.CurrentDirectory, @"model/huge-vocabulary.scorer")
-
-        if not (File.Exists modelFile) then
-            Error("Failed to load model file.")
-        else if useScorer && not (File.Exists scorerFile) then
-            Error("Failed to load scorer file.")
+    let public NewClient (useScorer: bool, modelFilePath: string, scorerFilePath: string) =
+        if not (File.Exists modelFilePath) then
+            Error($"Failed to load model file at  `{modelFilePath}`.")
+        else if useScorer && not (File.Exists scorerFilePath) then
+            Error($"Failed to load scorer file at `{scorerFilePath}`.")
         else
-            let client = new STT(modelFile)
+            let client = new STT(modelFilePath)
 
             if useScorer then
-                client.EnableExternalScorer(scorerFile)
+                client.EnableExternalScorer(scorerFilePath)
 
             Ok(TranscripterClient(client))

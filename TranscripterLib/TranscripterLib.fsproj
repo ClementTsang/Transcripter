@@ -7,24 +7,6 @@
 
     <ItemGroup>
         <Compile Include="Library.fs"/>
-        <EmbeddedResource Include="model\english_huge_1.0.0_model.tflite">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </EmbeddedResource>
-        <Content Include="model\huge-vocabulary.scorer">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <ContentWithTargetPath Include="shared_libs\libstt.tflite.Linux\libkenlm.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libkenlm.so</TargetPath>
-        </ContentWithTargetPath>
-        <ContentWithTargetPath Include="shared_libs\libstt.tflite.Linux\libsox.so.3" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libsox.so.3</TargetPath>
-        </ContentWithTargetPath>
-        <ContentWithTargetPath Include="shared_libs\libstt.tflite.Linux\libstt.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libstt.so</TargetPath>
-        </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup>
