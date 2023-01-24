@@ -3,7 +3,7 @@
 
   <p>
   A simple, offline program to automatically get transcriptions from files with English audio.</br>
-  Primarily built on Coqui's STT 1.3.0, FFMpeg + FFMpegCore, and Avalonia.
+  Built with F# alongside Coqui's STT 1.3.0, FFMpeg + FFMpegCore, and Avalonia.
   </p>
 </div>
 
