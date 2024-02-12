@@ -177,6 +177,7 @@ type ProcessingViewModel() =
         // - Set up a threshold for confidence!
         // - Allow setting a language.
         // - Allow selecting GPU acceleration.
+        // - Update Avalonia version.
 
         let numClients =
             min this.Config.NumCPUs this.ProcessingFiles.Count
