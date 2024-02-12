@@ -4,9 +4,12 @@ open System
 open System.IO
 open System.Threading
 open FFMpegCore
+open FSharp.Control
+open Microsoft.FSharp.Core
 open Microsoft.VisualBasic.FileIO
 open NAudio.Wave
-open STTClient
+open Whisper.net
+open Whisper.net.Ggml
 
 module Transcripter =
     let private deleteIfExists filePath =
@@ -22,13 +25,11 @@ module Transcripter =
             | _ -> return false
         }
 
-    type public TranscripterClient(stt: STT) =
-        let client = stt
+    type public TranscripterClient(client: WhisperProcessor) =
+        let client = client
 
-        member this.Transcribe(inputPath: string, ?numAttempts: uint, ?token: CancellationToken) =
+        member this.Transcribe(inputPath: string, ?token: CancellationToken) =
             if File.Exists inputPath then
-                let sampleRate = client.GetModelSampleRate()
-
                 let wavPath =
                     let tmp = FileSystem.GetTempFileName()
 
@@ -50,9 +51,9 @@ module Transcripter =
                                 true,
                                 fun options ->
                                     options
-                                        .WithAudioSamplingRate(sampleRate)
                                         .WithFastStart()
                                         .WithCustomArgument("-ac 1")
+                                        .WithCustomArgument("-ar 16000")
                                         .WithCustomArgument("-async 1")
                                     |> ignore
                             )
@@ -65,22 +66,9 @@ module Transcripter =
                             .Wait()
                     | None -> args.ProcessAsynchronously(true).Wait()
 
-                    let inputBytes = File.ReadAllBytes(wavPath)
-
-                    let buffer = WaveBuffer inputBytes
-
-                    let bufferSize =
-                        Convert.ToUInt32(buffer.MaxSize / 2)
-
-                    let numAttempts =
-                        match numAttempts with
-                        | Some numAttempts -> numAttempts
-                        | None -> 1u
-
-                    let result =
-                        client.SpeechToTextWithMetadata(buffer.ShortBuffer, bufferSize, numAttempts)
-
-                    buffer.Clear()
+                    let fileStream = File.OpenRead(wavPath)
+                    
+                    let result = client.ProcessAsync(fileStream) |> TaskSeq.toList
 
                     deleteIfExists wavPath
                     Ok result
@@ -91,15 +79,39 @@ module Transcripter =
             else
                 Error($"{inputPath} does not exist.")
 
-    let public NewClient (useScorer: bool, modelFilePath: string, scorerFilePath: string) =
-        if not (File.Exists modelFilePath) then
-            Error($"Failed to load model file at  `{modelFilePath}`.")
-        else if useScorer && not (File.Exists scorerFilePath) then
-            Error($"Failed to load scorer file at `{scorerFilePath}`.")
-        else
-            let client = new STT(modelFilePath)
+    let public NewClient (modelFilePath: string, numThreads: int) =
+        let validFile =
+            if not (File.Exists modelFilePath) then
+                try
+                    // printfn "Model doesn't exist at path, going to try downloading model..."
+                    
+                    let parent = Directory.GetParent(modelFilePath)
+                    Directory.CreateDirectory(parent.FullName) |> ignore
+                    
+                    let writer = File.OpenWrite(modelFilePath)
+                    let stream = WhisperGgmlDownloader.GetGgmlModelAsync(GgmlType.Base) |> Async.AwaitTask |> Async.RunSynchronously
+                    stream.CopyToAsync(writer).Wait()
+                    writer.Dispose()
 
-            if useScorer then
-                client.EnableExternalScorer(scorerFilePath)
+                    // printfn "Finished downloading model."
+                    
+                    Ok(())
+                with
+                | ex ->
+                    Error($"Failed to load model file at  `{modelFilePath}`; failed to download due to {ex}.")
+            else
+                Ok(())
+                
+        match validFile with
+        | Ok _ ->
+            // printfn $"Using model at {modelFilePath}."
+            let factory = WhisperFactory.FromPath(modelFilePath)
+            let client = factory
+                             .CreateBuilder()
+                             .WithLanguage("auto")
+                             .WithThreads(numThreads)
+                             .Build()
 
             Ok(TranscripterClient(client))
+        | Error err ->
+            Error(err)

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
         <TrimMode>copyused</TrimMode>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
@@ -18,26 +18,6 @@
     <ItemGroup>
         <Folder Include="Models\" />
         <AvaloniaResource Include="Assets\**" />
-        <Content Include="model\english_huge_1.0.0_model.tflite">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <Content Include="model\huge-vocabulary.scorer">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <None Include="shared_libs\libstt.tflite.Linux\libkenlm.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libkenlm.so</TargetPath>
-        </None>
-        <None Include="shared_libs\libstt.tflite.Linux\libsox.so.3" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libsox.so.3</TargetPath>
-        </None>
-        <None Include="shared_libs\libstt.tflite.Linux\libstt.so" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>libstt.so</TargetPath>
-        </None>
         <None Remove=".gitignore" />
         <None Include="NLog.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -79,11 +59,12 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.14" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.14" />
         <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0" />
-        <PackageReference Include="NLog" Version="5.0.0" />
-        <PackageReference Update="FSharp.Core" Version="6.0.4" />
+        <PackageReference Include="NLog" Version="5.2.8" />
+        <PackageReference Update="FSharp.Core" Version="8.0.101" />
+        <PackageReference Include="Whisper.net" Version="1.5.0" />
+        <PackageReference Include="Whisper.net.Runtime" Version="1.5.0" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj" />
         <ProjectReference Include="..\TranscripterLib\TranscripterLib.fsproj" />
     </ItemGroup>
     <ItemGroup>

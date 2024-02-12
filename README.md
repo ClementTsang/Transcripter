@@ -3,7 +3,7 @@
 
   <p>
   A simple, offline program to automatically get transcriptions from files with English audio.</br>
-  Built with F# alongside Coqui's STT 1.3.0, FFMpeg + FFMpegCore, and Avalonia.
+  Built with F# alongside OpenAI's Whisper, FFMpeg + FFMpegCore, and Avalonia.
   </p>
 </div>
 
@@ -23,31 +23,12 @@ This repo is split into two main parts:
 
 - [`TranscripterLib`](./TranscripterLib): The "core" library for transcription logic. This isn't really much more than a
   simple wrapper on top of
-  Coqui's [STT](https://github.com/coqui-ai/STT) for speech-to-text and FFMpeg via FFMpegCore to convert video files
-  into the appropriate audio files for STT.
+  OpenAI's [Whisper](https://github.com/openai/whisper) for speech-to-text and FFMpeg via FFMpegCore to convert video files
+  into the appropriate audio files for Whisper.
 
 - [`TranscripterUI`](./TranscripterUI): Handles the UI and application logic to transcribe files, built
   on [Avalonia](https://avaloniaui.net/).
 
-Transcripter's speech-to-text is currently based on version 1.3.0 of STT, and a submodule from v1.3.0
-of [the STT repo](https://github.com/coqui-ai/STT) is also included in the repo for usage in .NET - the main
-important part is the [.NET library](https://github.com/coqui-ai/STT/tree/main/native_client/dotnet) portion of the
-repo.
-
-The English language model and scorer used for speech-to-text is also from STT (English, 1.0.0). This can be found
-inside the `TranscripterLib` portion of the repo [here](./TranscripterLib/model), and
-the model/scorer itself can be found from Coqui's website [here](https://coqui.ai/english/coqui/v1.0.0-huge-vocab).
-
-### Running
-
-If you're running via something like Rider's Run, you may need to set the `LD_LIBRARY_PATH` environment variable
-to not be blank (if it is) for the STT shared libraries to be detected. For example:
-
-```bash
-LD_LIBRARY_PATH=:
-```
-
-seems to work. This appears to be [a bug](https://github.com/dotnet/sdk/issues/9586) with dotnet in general.
 
 ## Disclaimer
 
@@ -61,4 +42,4 @@ accept bug reports and PRs though.
 ## Motivation
 
 I was looking for a simple offline program to get transcripts from a bunch of lecture recordings I had, and also wanted
-a bit of an excuse to get my feet wet with F#, Avalonia, and STT.
+a bit of an excuse to get my feet wet with F# and Avalonia.

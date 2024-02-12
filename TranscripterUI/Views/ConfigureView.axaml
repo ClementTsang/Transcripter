@@ -88,117 +88,6 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </StackPanel>
-
-                        <StackPanel Spacing="20">
-                            <StackPanel Spacing="2">
-                                <TextBlock HorizontalAlignment="Left"
-                                           VerticalAlignment="Center"
-                                           FontSize="20"
-                                           FontWeight="Bold"
-                                           Foreground="#fff"
-                                           FontFamily="{StaticResource OpenSans}"
-                                           Text="Line Splitting" />
-                                <TextBlock HorizontalAlignment="Left"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           Foreground="#99AAB5"
-                                           FontFamily="{StaticResource OpenSans}"
-                                           TextWrapping="Wrap"
-                                           Text="Controls how lines are split in the generated transcript file." />
-                                <ComboBox Items="{Binding LineSplittingOptions}"
-                                          Width="230"
-                                          Cursor="Hand"
-                                          Margin="0,4,0,0"
-                                          SelectedIndex="{Binding LineSplittingIndex, Mode=TwoWay}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Display}"
-                                                       FontFamily="{StaticResource OpenSans}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </StackPanel>
-
-                            <StackPanel Spacing="16">
-                                <StackPanel Spacing="2" IsEnabled="{Binding WordLengthDisplay.Item1}"
-                                            Opacity="{Binding WordLengthDisplay.Item2}">
-                                    <TextBlock HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               FontSize="16"
-                                               FontWeight="Bold"
-                                               Foreground="#fff"
-                                               FontFamily="{StaticResource OpenSans}"
-                                               Text="Max Word Length" />
-                                    <TextBlock HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               FontSize="14"
-                                               Foreground="#99AAB5"
-                                               FontFamily="{StaticResource OpenSans}"
-                                               TextWrapping="Wrap"
-                                               Text="Limits the line to a certain number of words." />
-
-                                    <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
-                                        <NumericUpDown Minimum="1"
-                                                       Value="{Binding MaxWordLength, Mode=TwoWay}"
-                                                       Watermark="100" />
-                                    </Panel>
-                                </StackPanel>
-
-                                <StackPanel Spacing="2" IsEnabled="{Binding LineLengthDisplay.Item1}"
-                                            Opacity="{Binding LineLengthDisplay.Item2}">
-                                    <TextBlock HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               FontSize="16"
-                                               FontWeight="Bold"
-                                               Foreground="#fff"
-                                               FontFamily="{StaticResource OpenSans}"
-                                               Text="Max Characters" />
-                                    <TextBlock HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               FontSize="14"
-                                               Foreground="#99AAB5"
-                                               FontFamily="{StaticResource OpenSans}"
-                                               TextWrapping="Wrap"
-                                               Text="Limits the line length to a certain number of characters." />
-
-                                    <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
-                                        <NumericUpDown Minimum="1"
-                                                       Value="{Binding MaxLineLength, Mode=TwoWay}"
-                                                       Watermark="1" />
-                                    </Panel>
-                                </StackPanel>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Spacing="2">
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="20"
-                                       FontWeight="Bold"
-                                       Foreground="#fff"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       Text="Automatic Sentence Splitting" />
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="14"
-                                       Foreground="#99AAB5"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       TextWrapping="Wrap"
-                                       Text="Whether to try and automatically mark sentences with periods. May not work very well." />
-                            <ComboBox Items="{Binding YesNoComboOptions}"
-                                      Width="80"
-                                      Cursor="Hand"
-                                      Margin="0,4,0,0"
-                                      SelectedIndex="{Binding AutoSentenceIndex, Mode=TwoWay}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}"
-                                                   FontFamily="{StaticResource OpenSans}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
-
                     </StackPanel>
 
                     <StackPanel Name="Advanced" Spacing="24">
@@ -226,7 +115,7 @@
                                        FontWeight="Bold"
                                        Foreground="#fff"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="Threads" />
+                                       Text="Parallel Tasks" />
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        TextWrapping="Wrap"
@@ -283,28 +172,6 @@
                                        FontWeight="Bold"
                                        Foreground="#fff"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="Candidates" />
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       FontSize="14"
-                                       Foreground="#99AAB5"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       Text="The total number of candidate transcripts to return - the highest confidence one will be picked. Note that increasing this may increase the time taken. Defaults to 1." />
-                            <Panel Margin="0,4,0,0" MinWidth="150" HorizontalAlignment="Left">
-                                <NumericUpDown Minimum="1"
-                                               Value="{Binding NumCandidates, Mode=TwoWay}"
-                                               Watermark="1" />
-                            </Panel>
-                        </StackPanel>
-
-                        <StackPanel Spacing="2">
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="20"
-                                       FontWeight="Bold"
-                                       Foreground="#fff"
-                                       FontFamily="{StaticResource OpenSans}"
                                        Text="Custom Model Path" />
                             <TextBlock HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
@@ -312,7 +179,7 @@
                                        FontSize="14"
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
-                                       Text="A path to a custom STT model." />
+                                       Text="A path to a custom GGML model." />
                             <Button Classes="Standard"
                                     Margin="0,4"
                                     Content="Select Model"
@@ -328,38 +195,6 @@
                                        Foreground="#99AAB5"
                                        FontFamily="{StaticResource OpenSans}"
                                        Text="{Binding ModelPathString}" />
-                        </StackPanel>
-
-                        <StackPanel Spacing="2">
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="20"
-                                       FontWeight="Bold"
-                                       Foreground="#fff"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       Text="Custom Scorer Path" />
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       FontSize="14"
-                                       Foreground="#99AAB5"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       Text="A path to a custom STT scorer." />
-                            <Button Classes="Standard"
-                                    Margin="0,4"
-                                    Content="Select Scorer"
-                                    Width="120"
-                                    FontSize="14"
-                                    FontFamily="{StaticResource OpenSans}"
-                                    Command="{Binding SelectScorer}" />
-                            <TextBlock HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Margin="0,-2"
-                                       TextWrapping="Wrap"
-                                       FontSize="12"
-                                       Foreground="#99AAB5"
-                                       FontFamily="{StaticResource OpenSans}"
-                                       Text="{Binding ScorerPathString}" />
                         </StackPanel>
 
                     </StackPanel>
