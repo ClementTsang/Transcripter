@@ -9,53 +9,32 @@ open System.Threading
 open FSharp.Collections.ParallelSeq
 open TranscripterLib
 open TranscripterUI.ViewModels
-
-type TranscriptWord(offset: float32) =
-    member val Offset = offset with get, set
-    member val Duration = 0f with get, set
-    member val Word = "" with get, set
+open Whisper.net
 
 
-type TranscriptLine() =
-    member val Offset = 0f with get, set
-    member val Duration = 0f with get, set
-    member val Words: ResizeArray<string> = ResizeArray() with get, set
-
-    member this.AddWord(word: TranscriptWord) =
-        if this.Words.Count = 0 then
-            this.Offset <- word.Offset
-
-        this.Words.Add word.Word
-        this.Duration <- word.Duration + word.Offset - this.Offset
+type TranscriptLine(startTime: TimeSpan, endTime: TimeSpan, words: String) =
+    member val Start = startTime with get, set
+    member val End = endTime with get, set
+    member val Words = words with get, set
 
     member this.Display(index: int, format: FileType) =
-        let startTime =
-            TimeSpan.FromSeconds(float this.Offset)
-
-        let endTime =
-            TimeSpan.FromSeconds((float this.Offset) + (float this.Duration))
-
         match format with
         | FileType.SRT ->
             let startTimeDisplay =
-                startTime.ToString($@"hh\:mm\:ss\,fff")
+                this.Start.ToString($@"hh\:mm\:ss\,fff")
 
             let endTimeDisplay =
-                endTime.ToString($@"hh\:mm\:ss\,fff")
+                this.End.ToString($@"hh\:mm\:ss\,fff")
 
-            let line = this.Words |> String.concat " "
-
-            $"{index + 1}\n{startTimeDisplay} --> {endTimeDisplay}\n{line}\n"
+            $"{index + 1}\n{startTimeDisplay} --> {endTimeDisplay}\n{this.Words}\n"
         | FileType.VTT ->
             let startTimeDisplay =
-                startTime.ToString($@"hh\:mm\:ss\.fff")
+                this.Start.ToString($@"hh\:mm\:ss\.fff")
 
             let endTimeDisplay =
-                endTime.ToString($@"hh\:mm\:ss\.fff")
+                this.End.ToString($@"hh\:mm\:ss\.fff")
 
-            let line = this.Words |> String.concat " "
-
-            $"{startTimeDisplay} --> {endTimeDisplay}\n{line}\n"
+            $"{startTimeDisplay} --> {endTimeDisplay}\n{this.Words}\n"
 
 
 
@@ -85,45 +64,11 @@ type ProcessingConfig(?config: ConfigureViewModel) =
         | Some config -> config.NumCPUs
         | None -> 1 with get, set
 
-    member val MaxWordLength =
-        match config with
-        | Some config -> config.MaxWordLength
-        | None -> 10 with get, set
-
-    member val MaxLineLength =
-        match config with
-        | Some config -> config.MaxLineLength
-        | None -> 100 with get, set
-
-    member val NumCandidates =
-        match config with
-        | Some config -> config.NumCandidates
-        | None -> 1u with get, set
-
     member val ModelPath =
         config
         |> Option.map (fun config -> config.ModelPath)
         |> Option.flatten
-        |> Option.defaultValue "model/english_huge_1.0.0_model.tflite" with get, set
-
-    member val ScorerPath =
-        config
-        |> Option.map (fun config -> config.ScorerPath)
-        |> Option.flatten
-        |> Option.defaultValue "model/huge-vocabulary.scorer" with get, set
-
-    member val LineSplitStrategy =
-        let index =
-            match config with
-            | Some config -> config.LineSplittingIndex
-            | None -> 0
-
-        ConfigureViewModel.LineSplittingOptions[index]
-
-    member val AutomaticSentence =
-        match config with
-        | Some config -> config.AutoSentenceIndex = 0
-        | None -> false
+        |> Option.defaultValue "model/ggml-base.bin" with get, set
 
 type ProcessFile(inputFile: string, outputFile: string) =
     let mutable status = NotStarted
@@ -172,94 +117,17 @@ type ProcessingViewModel() =
             | Done _
             | Failed _ -> acc + 1)
 
-    member this.shouldSplit(currentLine: TranscriptLine) =
-        match this.Config.LineSplitStrategy with
-        | LineControlType.WordLength ->
-            currentLine.Words.Count
-            >= this.Config.MaxWordLength
-        | LineControlType.CharLength ->
-            currentLine.Words
-            |> Seq.sumBy (fun word -> word.Length)
-            >= this.Config.MaxLineLength
-        | LineControlType.WordAndCharLength ->
-            currentLine.Words.Count
-            >= this.Config.MaxWordLength
-            || currentLine.Words
-               |> Seq.sumBy (fun word -> word.Length)
-               >= this.Config.MaxLineLength
+    member this.BuildTranscript(segments: List<SegmentData>) =
+        segments
+        |> Seq.map(fun segment ->
+            TranscriptLine(segment.Start, segment.End, segment.Text.Replace("[BLANK_AUDIO]", "").Trim())
+        )
+        |> Seq.filter (fun line ->
+            not (String.IsNullOrWhiteSpace line.Words)
+        )
+        |> Seq.toList
 
-    member this.BuildTranscript(result: STTClient.Models.Metadata) =
-        let bestTranscript =
-            result.Transcripts
-            |> Seq.maxBy (fun transcript -> transcript.Confidence)
-
-        let mutable currentWord: Option<TranscriptWord> =
-            None
-
-        let mutable wordList: ResizeArray<TranscriptWord> =
-            ResizeArray()
-
-        bestTranscript.Tokens
-        |> Seq.iter (fun token ->
-            if String.IsNullOrWhiteSpace token.Text then
-                match currentWord with
-                | Some word ->
-                    word.Duration <- max 0.0f (token.StartTime - word.Offset)
-                    wordList.Add(word)
-                    currentWord <- None
-                | None -> ()
-            else
-                let word =
-                    match currentWord with
-                    | Some word -> word
-                    | None -> TranscriptWord(token.StartTime)
-
-                word.Word <- word.Word + token.Text
-                word.Duration <- max 0.0f (token.StartTime - word.Offset)
-                currentWord <- Some(word))
-
-        match currentWord with
-        | Some word ->
-            if word.Word.Length > 0 then
-                wordList.Add(word)
-        | None -> ()
-
-        if this.Config.AutomaticSentence then
-            let sentence_sec_offset_threshold = 0.2f
-
-            wordList
-            |> Seq.windowed 2
-            |> Seq.iter (fun window ->
-                let a = window[0]
-                let b = window[1]
-
-                if b.Offset - (a.Offset + a.Duration) > sentence_sec_offset_threshold then
-                    a.Word <- a.Word + ".")
-
-            if wordList.Count > 0 then
-                wordList[wordList.Count - 1].Word <- wordList[wordList.Count - 1].Word + "."
-
-        let mutable transcriptionList: ResizeArray<TranscriptLine> =
-            [ TranscriptLine() ] |> ResizeArray
-
-        wordList
-        |> Seq.iter (fun word ->
-            let currLine = transcriptionList[transcriptionList.Count - 1]
-            if this.shouldSplit currLine then
-                if word.Offset - (currLine.Duration + currLine.Offset) < 0.1f then
-                    currLine.Duration <- word.Offset - currLine.Offset
-                else
-                    currLine.Duration <- currLine.Duration + 0.1f
-                transcriptionList.Add(TranscriptLine())
-
-            transcriptionList[transcriptionList.Count - 1]
-                .AddWord word)
-
-        transcriptionList[transcriptionList.Count - 1].Duration <- transcriptionList[transcriptionList.Count - 1].Duration + 0.1f
-        
-        transcriptionList
-
-    member this.WriteTranscript(transcript: ResizeArray<TranscriptLine>, outputPath: string) =
+    member this.WriteTranscript(transcript: List<TranscriptLine>, outputPath: string) =
         let outputFormat =
             let extension =
                 (Path.GetExtension outputPath).ToLower()
@@ -277,6 +145,10 @@ type ProcessingViewModel() =
             if (not this.Config.OverwriteFiles
                 && not (File.Exists outputPath))
                || this.Config.OverwriteFiles then
+                
+                let parent = Directory.GetParent(outputPath)
+                Directory.CreateDirectory(parent.FullName) |> ignore
+                
                 File.WriteAllText(
                     outputPath,
                     transcript
@@ -294,20 +166,25 @@ type ProcessingViewModel() =
         | Error err -> Error(err)
 
     member this.ProcessFiles() =
-        // Note that STT clients cannot be "shared" across a concurrent "job" - each job needs its own dedicated
-        // client, otherwise you are guaranteed to get a nasty crash when running jobs in parallel.
-        //
-        // Therefore, we pre-allocate multiple clients and dump them it into a list, alongside an index list. The index
+        // We pre-allocate multiple clients and dump them it into a list, alongside an index list. The index
         // list controls which client is accessed, and we synchronize this alongside our parallel thread accesses.
         //
         // Note that the accesses to this index list should _probably_ be protected by a mutex, since it's parallel...
         let processMutex = new Mutex()
+        
+        // TODO:
+        // - Allow configuring number of threads per client
+        // - Set up a threshold for confidence!
+        // - Allow setting a language.
 
         let numClients =
             min this.Config.NumCPUs this.ProcessingFiles.Count
             
+        let numThreads = Math.Clamp(Environment.ProcessorCount / this.Config.NumCPUs, 1, Math.Max(1, Environment.ProcessorCount - 3))
+        ProcessingViewModel.Log.Debug $"Using {numThreads} per client."
+
         let clients =
-            [ for _ in 1..numClients -> Transcripter.NewClient(true, this.Config.ModelPath, this.Config.ScorerPath) ]
+            [ for _ in 1..numClients -> Transcripter.NewClient(this.Config.ModelPath, numThreads) ]
             |> Seq.choose (fun client ->
                 match client with
                 | Ok client ->
@@ -317,7 +194,7 @@ type ProcessingViewModel() =
                     ProcessingViewModel.Log.Debug($"err creating client: {err}")
                     None)
             |> Seq.toList
-
+            
         let clientIndices =
             [ for i in 0 .. (clients.Length - 1) -> i ]
             |> ResizeArray
@@ -347,9 +224,7 @@ type ProcessingViewModel() =
                     let perFileWatch =
                         System.Diagnostics.Stopwatch.StartNew()
 
-                    let transcription =
-                        client.Transcribe(file.In, this.Config.NumCandidates)
-
+                    let transcription = client.Transcribe(file.In)
 
                     match transcription with
                     | Ok result ->

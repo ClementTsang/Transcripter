@@ -10,13 +10,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="FFMpegCore" Version="4.8.0"/>
-        <PackageReference Include="NAudio" Version="2.1.0"/>
-        <PackageReference Update="FSharp.Core" Version="6.0.4"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\STT\native_client\dotnet\STTClient\STTClient.csproj"/>
+        <PackageReference Include="FFMpegCore" Version="5.1.0" />
+        <PackageReference Include="FSharp.Control.TaskSeq" Version="0.3.0" />
+        <PackageReference Include="NAudio" Version="2.2.1" />
+        <PackageReference Update="FSharp.Core" Version="8.0.101" />
+        <PackageReference Include="Whisper.net" Version="1.5.0" />
+        <PackageReference Include="Whisper.net.Runtime" Version="1.5.0" />
     </ItemGroup>
 
 </Project>

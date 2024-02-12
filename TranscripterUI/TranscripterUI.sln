@@ -4,8 +4,6 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TranscripterUI", "Transcrip
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TranscripterLib", "..\TranscripterLib\TranscripterLib.fsproj", "{B1FB803A-C705-4F18-917F-663ACEAEEDEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STTClient", "..\STT\native_client\dotnet\STTClient\STTClient.csproj", "{D103BD3B-B115-459D-829B-E534CB2CDC11}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

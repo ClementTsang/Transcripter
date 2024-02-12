@@ -27,7 +27,7 @@
                                FontSize="16"
                                Foreground="#99AAB5"
                                FontFamily="{StaticResource OpenSans}"
-                               Text="Current transcription progress. Set tight!" />
+                               Text="Current transcription progress. Sit tight!" />
                 </StackPanel>
             </StackPanel>
 
