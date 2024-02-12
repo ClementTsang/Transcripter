@@ -176,6 +176,7 @@ type ProcessingViewModel() =
         // - Allow configuring number of threads per client
         // - Set up a threshold for confidence!
         // - Allow setting a language.
+        // - Allow selecting GPU acceleration.
 
         let numClients =
             min this.Config.NumCPUs this.ProcessingFiles.Count
