@@ -13,7 +13,7 @@ https://user-images.githubusercontent.com/34804052/171553226-64915e3e-f42a-4b44-
 
 To work on this, clone the repo and install FFMpeg + ffprobe.
 
-This project is written in F#, and as of writing, built on .NET Core 6.0.102. Personally, I wrote this on
+This project is written in F#, and as of writing, built on .NET Core 8.0. Personally, I wrote this on
 Linux and used Rider for development.
 
 ### Project structure
