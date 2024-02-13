@@ -11,8 +11,7 @@ https://user-images.githubusercontent.com/34804052/171553226-64915e3e-f42a-4b44-
 
 ## Development
 
-To work on this, clone the repo and install FFMpeg + ffprobe, then run the setup script (`setup.sh`) to download all additional
-required files. Note this script relies on `wget` to download files.
+To work on this, clone the repo and install FFMpeg + ffprobe.
 
 This project is written in F#, and as of writing, built on .NET Core 6.0.102. Personally, I wrote this on
 Linux and used Rider for development.
