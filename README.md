@@ -2,7 +2,7 @@
   <h1>Transcripter</h1>
 
   <p>
-  A simple, offline program to automatically get transcriptions from files with English audio.</br>
+  A simple, offline program to automatically get transcriptions from files with audio.</br>
   Built with F# alongside OpenAI's Whisper, FFMpeg + FFMpegCore, and Avalonia.
   </p>
 </div>
@@ -31,11 +31,12 @@ This repo is split into two main parts:
 
 ## Disclaimer
 
-Note that Transcripter is not perfect - the generated transcripts are not guaranteed to be
+Note that Transcripter is not perfect - - the generated transcripts are not guaranteed to be
 completely correct, and its generated transcripts should be treated as more of a starting point if perfect correctness
-is required. Transcripter will also struggle on words that aren't clearly pronounced, or words that are not standard English.
-
-Furthermore, this project isn't one that I'm actively going to maintain too much - it was more a project for fun. I'll
+is required.
+- Transcripter will also struggle on words that aren't clearly pronounced.
+- As a result of being based on Whisper, Transcripter supports multiple languages - see [here](https://help.openai.com/en/articles/7031512-whisper-api-faq) for more details.
+- Furthermore, this project isn't one that I'm actively going to maintain too much - it was more a project for fun. I'll
 accept bug reports and PRs though.
 
 ## Motivation
