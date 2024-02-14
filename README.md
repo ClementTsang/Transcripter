@@ -31,8 +31,7 @@ This repo is split into two main parts:
 
 ## Disclaimer
 
-Note that Transcripter is not perfect - - the generated transcripts are not guaranteed to be
-completely correct, and its generated transcripts should be treated as more of a starting point if perfect correctness
+- Note that Transcripter is not perfect, and the generated transcripts should be treated as more of a starting point if perfect correctness
 is required.
 - Transcripter will also struggle on words that aren't clearly pronounced.
 - As a result of being based on Whisper, Transcripter supports multiple languages - see [here](https://help.openai.com/en/articles/7031512-whisper-api-faq) for more details.
