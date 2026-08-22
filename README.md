@@ -9,6 +9,10 @@
 
 https://user-images.githubusercontent.com/34804052/171553226-64915e3e-f42a-4b44-a44a-8d21cac70509.mp4
 
+## Usage
+
+Either download the [latest release](https://github.com/ClementTsang/Transcripter/releases/latest) or clone the repo and build it (see development steps below).
+
 ## Development
 
 To work on this, clone the repo and install FFMpeg + ffprobe.
